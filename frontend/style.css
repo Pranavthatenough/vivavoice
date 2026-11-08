@@ -1,0 +1,193 @@
+/* VivaVoice: an answer sheet. Student writes in blue ink, examiner marks in red. */
+:root {
+  --paper: #f4f7f8;
+  --rule: #cfdbe6;          /* ruled lines */
+  --margin-rule: #e4a5a5;   /* the red margin line */
+  --text: #1c232b;
+  --pencil: #5b6773;        /* quiet text */
+  --ink: #1f3c88;           /* the student's pen */
+  --red: #c42a2a;           /* the examiner's pen */
+  --covered: rgba(64, 160, 110, 0.28);
+  --missed: rgba(255, 205, 0, 0.5);
+  --line: 2rem;             /* height of one ruled line */
+  --margin-w: 5.5rem;
+
+  --f-ui: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --f-text: "Literata", Georgia, serif;
+  --f-hand: "Kalam", "Segoe Print", cursive;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #161b22;
+    --rule: #263140;
+    --margin-rule: #6b3434;
+    --text: #e3e8ee;
+    --pencil: #9aa6b2;
+    --ink: #9db8ff;
+    --red: #ff7b72;
+    --covered: rgba(80, 200, 140, 0.25);
+    --missed: rgba(255, 210, 60, 0.3);
+  }
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font: 1rem/1.5 var(--f-ui);
+  min-height: 100vh;
+}
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  max-width: 52rem; margin: 0 auto; padding: 1.25rem 1rem 0.5rem;
+}
+.brand {
+  font: 700 1.15rem var(--f-ui); color: var(--ink);
+  background: none; border: 0; padding: 0; cursor: pointer;
+}
+.topbar-note { color: var(--pencil); font-size: 0.9rem; }
+
+/* ---------- The sheet: a red margin rule and a body column ---------- */
+.sheet { max-width: 52rem; margin: 0 auto; padding: 0 1rem 4rem; }
+.row { display: grid; grid-template-columns: var(--margin-w) 1fr; }
+.margin {
+  border-right: 2px solid var(--margin-rule);
+  position: relative;
+  padding-top: 1.5rem;
+}
+.body { padding: 1.5rem 0 1.5rem 1.5rem; min-width: 0; max-width: 40rem; }
+
+h1, h2.question, .report-title {
+  font-family: var(--f-text); font-weight: 600; line-height: 1.3; margin: 0 0 1rem;
+}
+h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+h2.question { font-size: clamp(1.3rem, 2.6vw, 1.6rem); }
+h3 { font-size: 1rem; margin: 2rem 0 0.75rem; }
+.lead { font-family: var(--f-text); font-size: 1.1rem; line-height: 1.7; color: var(--pencil); margin: 0 0 2rem; }
+.hint { color: var(--pencil); font-size: 0.875rem; margin: 0.5rem 0 0; }
+.status { min-height: 1.5rem; color: var(--pencil); margin: 1rem 0 0; }
+.status.error { color: var(--red); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  font: 700 1rem var(--f-ui);
+  color: var(--paper); background: var(--ink);
+  border: 0; border-radius: 6px; padding: 0.7rem 1.2rem; cursor: pointer;
+}
+.btn:hover { filter: brightness(1.12); }
+.btn:disabled { opacity: 0.55; cursor: wait; }
+.btn.quiet { background: none; color: var(--ink); border: 1.5px solid var(--ink); }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* ---------- Home ---------- */
+.notes-list { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+.notes-list li {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.75rem 0; border-bottom: 1px solid var(--rule);
+}
+.notes-list .name { font-family: var(--f-text); font-size: 1.1rem; }
+.notes-list .meta { color: var(--pencil); font-size: 0.875rem; display: block; }
+.notes-list .empty { color: var(--pencil); border: 0; }
+.upload-label {
+  display: inline-block; cursor: pointer; color: var(--ink); font-weight: 700;
+  border-bottom: 1.5px dashed var(--ink); padding-bottom: 2px;
+}
+.upload input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.upload input:focus-visible + .hint, .upload-label:focus-within { outline: 3px solid var(--ink); }
+
+/* ---------- Viva ---------- */
+.qnum {
+  position: absolute; right: 0.9rem; top: 1.6rem;
+  font: 700 1.1rem var(--f-hand); color: var(--pencil);
+}
+.progress { color: var(--pencil); margin: 0 0 0.5rem; font-size: 0.95rem; }
+
+/* Ruled answer space: text sits on the lines */
+textarea {
+  width: 100%; resize: vertical;
+  font: 1.15rem/var(--line) var(--f-hand); color: var(--ink);
+  background: transparent;
+  background-image: linear-gradient(to bottom, transparent calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px));
+  background-size: 100% var(--line);
+  background-attachment: local;
+  border: 0; border-top: 1px solid var(--rule);
+  padding: 0 0.25rem; min-height: calc(var(--line) * 6);
+}
+textarea:focus-visible { outline: none; box-shadow: 0 2px 0 var(--ink); }
+textarea::placeholder { color: var(--pencil); opacity: 0.7; }
+textarea:disabled { opacity: 0.8; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-top: 1rem; }
+.actions .hint { margin: 0; }
+.timer { margin-left: auto; color: var(--pencil); font-variant-numeric: tabular-nums; }
+
+/* ---------- The examiner's marking ---------- */
+.marking .body { padding-top: 0.5rem; }
+.score-mark {
+  position: relative; width: 4.4rem; height: 3.1rem; margin: 0.25rem auto 0;
+  display: grid; place-items: center;
+  font: 700 1.35rem var(--f-hand); color: var(--red);
+}
+.score-mark svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.score-mark path { fill: none; stroke: var(--red); stroke-width: 3; stroke-linecap: round; }
+.score-mark.drawn path { stroke-dasharray: 260; stroke-dashoffset: 260; animation: draw 0.7s ease-out 0.15s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.score-mark.big { width: 4.9rem; height: 3.5rem; font-size: 1.5rem; }
+
+.feedback { font: 1.25rem/1.5 var(--f-hand); color: var(--red); margin: 0 0 1rem; }
+.points { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+.points li { position: relative; padding: 0.35rem 0 0.35rem 2rem; }
+.points li::before {
+  position: absolute; left: 0.2rem; top: 0.15rem;
+  font: 700 1.3rem var(--f-hand); color: var(--red);
+}
+.points li.covered::before { content: "\2713"; }
+.points li.missed::before { content: "\2717"; }
+.points li.missed { color: var(--pencil); }
+
+.excerpt { margin: 0 0 1.5rem; padding: 1rem 1.1rem; border-left: 3px solid var(--rule); }
+.excerpt figcaption { font-weight: 700; margin-bottom: 0.5rem; }
+.excerpt blockquote { margin: 0; font: 1rem/1.75 var(--f-text); }
+mark { color: inherit; border-radius: 2px; padding: 0 1px; }
+.hl-covered { background: var(--covered); }
+.hl-missed { background: var(--missed); }
+.legend { font-size: 0.85rem; color: var(--pencil); margin: 0.75rem 0 0; display: flex; gap: 1rem; }
+
+/* ---------- Report ---------- */
+.verdict { font: 1.3rem/1.5 var(--f-hand); color: var(--red); margin: 0; }
+.pages { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pages li {
+  width: 3.4rem; height: 4.4rem; border: 1px solid var(--rule); border-radius: 3px;
+  display: flex; flex-direction: column; justify-content: space-between; padding: 0.35rem;
+  font-size: 0.8rem; color: var(--pencil); position: relative;
+}
+.pages li .pg-score { font: 700 1rem var(--f-hand); color: var(--text); }
+.pages li[data-level] { border-color: transparent; }
+.pages li[data-level="ok"]   { background: color-mix(in srgb, var(--red) 10%, transparent); }
+.pages li[data-level="weak"] { background: color-mix(in srgb, var(--red) 32%, transparent); }
+.pages li[data-level="bad"]  { background: color-mix(in srgb, var(--red) 58%, transparent); }
+.pages li[data-level="bad"] .pg-score, .pages li[data-level="bad"] span { color: #fff; }
+.q-list { padding-left: 1.25rem; margin: 0 0 2rem; }
+.q-list li { margin-bottom: 0.75rem; font-family: var(--f-text); }
+.q-list .q-meta { display: block; font: 0.875rem var(--f-ui); color: var(--pencil); }
+.q-list .q-score { font: 700 1rem var(--f-hand); color: var(--red); }
+
+/* ---------- Small screens ---------- */
+@media (max-width: 600px) {
+  :root { --margin-w: 3.6rem; }
+  .body { padding-left: 1rem; }
+  .score-mark { width: 3.2rem; height: 2.4rem; font-size: 1.05rem; }
+  .score-mark.big { width: 3.4rem; height: 2.6rem; font-size: 1.1rem; }
+  .qnum { right: 0.6rem; }
+  .timer { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .score-mark.drawn path { animation: none; stroke-dashoffset: 0; }
+}

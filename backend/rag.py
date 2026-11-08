@@ -13,8 +13,9 @@ import chromadb
 import ollama
 import pymupdf
 
-EMBED_MODEL = "nomic-embed-text"          # multilingual embedding model, run by Ollama
-DB_PATH = "data/chroma"         # where the vector store is saved (ignored by git)
+EMBED_MODEL = "nomic-embed-text"   # embedding model, run by Ollama
+ROOT = Path(__file__).resolve().parent.parent   # the project folder
+DB_PATH = str(ROOT / "data" / "chroma")         # where the vector store is saved (ignored by git)
 CHUNK_WORDS = 120               # target words per chunk
 OVERLAP_WORDS = 25              # words repeated between neighbouring chunks
 

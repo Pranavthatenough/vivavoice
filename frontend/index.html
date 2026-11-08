@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VivaVoice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" id="home-link" type="button">VivaVoice</button>
+    <span class="topbar-note" id="topbar-note"></span>
+  </header>
+
+  <main class="sheet">
+    <!-- Home: pick notes -->
+    <section id="screen-home" class="screen">
+      <div class="row">
+        <div class="margin"></div>
+        <div class="body">
+          <h1>Your examiner is ready.</h1>
+          <p class="lead">Pick the notes you want to be examined on. You'll get five questions, one at a time, and every mark comes with the lines from your notes that it was based on.</p>
+
+          <ul class="notes-list" id="notes-list"></ul>
+
+          <form class="upload" id="upload-form">
+            <label class="upload-label" for="upload-input">Add notes as a PDF</label>
+            <input id="upload-input" type="file" accept="application/pdf">
+            <p class="hint">Typed or exported PDFs work. Scanned pages don't yet.</p>
+          </form>
+          <p class="status" id="home-status" role="status"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Viva: one question at a time -->
+    <section id="screen-viva" class="screen" hidden>
+      <div class="row">
+        <div class="margin"><span class="qnum" id="qnum"></span></div>
+        <div class="body">
+          <p class="progress" id="progress"></p>
+          <h2 class="question" id="question"></h2>
+
+          <form id="answer-form">
+            <label class="sr-only" for="answer">Your answer</label>
+            <textarea id="answer" rows="6" placeholder="Write your answer as you would say it."></textarea>
+            <div class="actions">
+              <button type="submit" class="btn" id="submit-btn">Hand in answer</button>
+              <span class="hint">Ctrl + Enter also hands it in. Type "pass" to skip.</span>
+              <span class="timer" id="timer" aria-label="Time on this question"></span>
+            </div>
+          </form>
+          <p class="status" id="viva-status" role="status"></p>
+        </div>
+      </div>
+
+      <!-- The examiner's marking, shown after grading -->
+      <div class="row marking" id="marking" hidden>
+        <div class="margin">
+          <div class="score-mark" id="score-mark">
+            <span id="score-text"></span>
+            <svg viewBox="0 0 100 70" aria-hidden="true"><path id="score-circle" d="M52 6 C80 4 96 18 94 36 C92 56 70 66 46 64 C20 62 4 50 6 32 C8 14 28 4 58 8"/></svg>
+          </div>
+        </div>
+        <div class="body">
+          <p class="feedback" id="feedback"></p>
+          <ul class="points" id="points"></ul>
+          <figure class="excerpt">
+            <figcaption id="excerpt-caption"></figcaption>
+            <blockquote id="excerpt"></blockquote>
+            <p class="legend"><mark class="hl-covered">You covered this</mark> <mark class="hl-missed">You missed this</mark></p>
+          </figure>
+          <button class="btn" id="next-btn" type="button"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Report -->
+    <section id="screen-report" class="screen" hidden>
+      <div class="row">
+        <div class="margin">
+          <div class="score-mark big" id="total-mark">
+            <span id="total-text"></span>
+            <svg viewBox="0 0 100 70" aria-hidden="true"><path d="M52 6 C80 4 96 18 94 36 C92 56 70 66 46 64 C20 62 4 50 6 32 C8 14 28 4 58 8"/></svg>
+          </div>
+        </div>
+        <div class="body">
+          <h2 class="report-title">Result sheet</h2>
+          <p class="verdict" id="verdict"></p>
+
+          <h3>Your notes, page by page</h3>
+          <ol class="pages" id="pages"></ol>
+          <p class="hint">Darker means a lower score. Blank pages weren't asked about this time.</p>
+
+          <h3>Questions</h3>
+          <ol class="q-list" id="q-list"></ol>
+
+          <button class="btn" id="again-btn" type="button">Start another viva</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -33,3 +33,16 @@ Every prompt I gave my AI agent while building VivaVoice, in order.
 **Manual check (10 questions):** Grounded: _/10. Fair grade: _/10.
 
 **Notes:** (anything odd you noticed)
+
+## Phase 3: Web app (v0.1)
+
+**Prompt:** Asked Claude to turn the terminal examiner into a FastAPI web app with an answer-sheet design, and to fix questions mixing topics.
+
+**What was built:**
+- Quote-verified grounding: each key point needs a word-for-word quote from the notes; code checks the quote exists, and regenerates the question if not (max 3 tries).
+- Removed the "Already asked" list, which caused topic mixing in Phase 2.
+- Evidence highlighting in the notes excerpt (covered / missed).
+- Prefetching the next question while the student answers.
+- Result sheet with a per-page score heatmap.
+
+**Results (2 vivas):** Grounded: _/10. Avg seconds to generate: _. Avg seconds waited: _.
