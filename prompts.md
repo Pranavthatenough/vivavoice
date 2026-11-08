@@ -24,3 +24,12 @@ Every prompt I gave my AI agent while building VivaVoice, in order.
 | When is a Wheatstone bridge balanced? | 4 | | |
 | What is a kilowatt hour? | 5 | | |
 | What is photosynthesis? (not in notes) | none | | |
+## Phase 2: Question generator + grader
+
+**Prompt:** Asked Claude for a terminal examiner: generate one grounded viva question per chunk (5 chunks from different pages) with 2-4 key points, using structured JSON output from the local LLM; grade answers with a yes/no checklist per key point and compute the score in code; save each session as JSON.
+
+**Model:** llama3.1:8b (or llama3.2:3b if memory was the issue)
+
+**Manual check (10 questions):** Grounded: _/10. Fair grade: _/10.
+
+**Notes:** (anything odd you noticed)
