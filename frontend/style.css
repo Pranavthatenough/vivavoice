@@ -178,6 +178,32 @@ mark { color: inherit; border-radius: 2px; padding: 0 1px; }
 .q-list .q-meta { display: block; font: 0.875rem var(--f-ui); color: var(--pencil); }
 .q-list .q-score { font: 700 1rem var(--f-hand); color: var(--red); }
 
+/* ---------- Voice ---------- */
+.voice-settings { display: flex; gap: 1rem; font-size: 0.9rem; color: var(--pencil); margin-left: auto; }
+.voice-settings label { display: flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+.voice-settings input { accent-color: var(--ink); width: 1rem; height: 1rem; }
+.topbar { flex-wrap: wrap; }
+
+.mic-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 1rem; margin: 0 0 1rem; }
+.mic {
+  --level: 0;
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  font: 700 1rem var(--f-ui); color: var(--ink);
+  background: none; border: 1.5px solid var(--ink); border-radius: 999px;
+  padding: 0.55rem 1.1rem 0.55rem 0.8rem; cursor: pointer;
+}
+.mic svg { width: 1.3rem; height: 1.3rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.mic[aria-pressed="true"] {
+  color: var(--red); border-color: var(--red);
+  /* the ring grows with your voice, so you can see the mic is hearing you */
+  box-shadow: 0 0 0 calc(2px + var(--level) * 10px) color-mix(in srgb, var(--red) 22%, transparent);
+}
+.mic:disabled { opacity: 0.5; cursor: wait; }
+.mic-status { margin: 0; color: var(--pencil); font-size: 0.95rem; }
+.mic-status.error { color: var(--red); }
+
+.delivery { font: 1.1rem/1.6 var(--f-hand); color: var(--red); margin: 0 0 1.5rem; }
+
 /* ---------- Small screens ---------- */
 @media (max-width: 600px) {
   :root { --margin-w: 3.6rem; }
@@ -186,6 +212,7 @@ mark { color: inherit; border-radius: 2px; padding: 0 1px; }
   .score-mark.big { width: 3.4rem; height: 2.6rem; font-size: 1.1rem; }
   .qnum { right: 0.6rem; }
   .timer { margin-left: 0; }
+  .voice-settings { margin-left: 0; width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

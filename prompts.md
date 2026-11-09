@@ -46,3 +46,18 @@ Every prompt I gave my AI agent while building VivaVoice, in order.
 - Result sheet with a per-page score heatmap.
 
 **Results (2 vivas):** Grounded: _/10. Avg seconds to generate: _. Avg seconds waited: _.
+
+## Phase 4: Voice (v0.2)
+
+**Prompt:** Asked Claude to add voice: local speech-to-text, the examiner reading questions and feedback aloud, a hands-free mode, and measuring how answers are spoken.
+
+**What was built:**
+- faster-whisper (small, int8, CPU) with word timestamps and silence filtering.
+- Browser recording that stops automatically after 2 s of silence, calibrated to room noise.
+- Hands-free mode and barge-in (speaking cuts the examiner off).
+- Delivery signals: time before speaking, filler words, long pauses, words per minute.
+- Whisper prompt includes the question (for subject words) but never the key points (to keep grading fair).
+
+**Problem:** av 19 removed an option faster-whisper uses. **Fix:** pinned av<19.
+
+**Results:** Misheard _ of _ words. Average transcription time: _ s.

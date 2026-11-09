@@ -13,6 +13,10 @@
   <header class="topbar">
     <button class="brand" id="home-link" type="button">VivaVoice</button>
     <span class="topbar-note" id="topbar-note"></span>
+    <div class="voice-settings" id="voice-settings">
+      <label><input type="checkbox" id="opt-speak"> Examiner speaks</label>
+      <label><input type="checkbox" id="opt-handsfree"> Hands-free</label>
+    </div>
   </header>
 
   <main class="sheet">
@@ -44,9 +48,17 @@
           <p class="progress" id="progress"></p>
           <h2 class="question" id="question"></h2>
 
+          <div class="mic-row" id="mic-row">
+            <button type="button" class="mic" id="mic-btn" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>
+              <span id="mic-label">Speak your answer</span>
+            </button>
+            <p class="mic-status" id="mic-status" role="status"></p>
+          </div>
+
           <form id="answer-form">
             <label class="sr-only" for="answer">Your answer</label>
-            <textarea id="answer" rows="6" placeholder="Write your answer as you would say it."></textarea>
+            <textarea id="answer" rows="6" placeholder="Speak, or write your answer as you would say it."></textarea>
             <div class="actions">
               <button type="submit" class="btn" id="submit-btn">Hand in answer</button>
               <span class="hint">Ctrl + Enter also hands it in. Type "pass" to skip.</span>
@@ -68,6 +80,7 @@
         <div class="body">
           <p class="feedback" id="feedback"></p>
           <ul class="points" id="points"></ul>
+          <p class="delivery" id="delivery" hidden></p>
           <figure class="excerpt">
             <figcaption id="excerpt-caption"></figcaption>
             <blockquote id="excerpt"></blockquote>
@@ -94,6 +107,11 @@
           <h3>Your notes, page by page</h3>
           <ol class="pages" id="pages"></ol>
           <p class="hint">Darker means a lower score. Blank pages weren't asked about this time.</p>
+
+          <div id="voice-report" hidden>
+            <h3>How you spoke</h3>
+            <p class="delivery" id="voice-summary"></p>
+          </div>
 
           <h3>Questions</h3>
           <ol class="q-list" id="q-list"></ol>

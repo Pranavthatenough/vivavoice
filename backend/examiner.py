@@ -48,16 +48,38 @@ class Grade(BaseModel):
     feedback: str
 
 
+class ExaminerUnavailable(Exception):
+    """The LLM couldn't answer, even after retrying."""
+
+
+LLM_RETRIES = 3
+
+
 def ask_llm(system, user, schema, temperature):
-    """Send a prompt to the local LLM and get back a validated object."""
-    reply = ollama.chat(
-        model=LLM_MODEL,
-        messages=[{"role": "system", "content": system},
-                  {"role": "user", "content": user}],
-        format=schema.model_json_schema(),
-        options={"temperature": temperature},
-    )
-    return schema.model_validate_json(reply["message"]["content"])
+    """
+    Send a prompt to the local LLM and get back a validated object.
+    A laptop running two AI models can briefly run short of memory, so a
+    failed call is retried a few times, with a growing pause in between.
+    """
+    last = None
+    for attempt in range(1, LLM_RETRIES + 1):
+        try:
+            reply = ollama.chat(
+                model=LLM_MODEL,
+                messages=[{"role": "system", "content": system},
+                          {"role": "user", "content": user}],
+                format=schema.model_json_schema(),
+                options={"temperature": temperature},
+                keep_alive="30m",   # keep the model loaded for the whole viva; every reload can fail
+            )
+            return schema.model_validate_json(reply["message"]["content"])
+        except Exception as e:   # memory error, Ollama restarting, or broken JSON
+            last = e
+            print(f"LLM call failed (try {attempt} of {LLM_RETRIES}): {str(e)[:160]}")
+            time.sleep(2 * attempt)
+    raise ExaminerUnavailable(
+        "The examiner's model couldn't run. It's usually short of memory: close other apps, "
+        f"then try again. Details: {str(last)[:200]}")
 
 
 # ---------- Grounding check: is the evidence really in the notes? ----------
@@ -179,6 +201,28 @@ def grade(q, answer):
     return {"score": score, "key_points": marked, "feedback": feedback}
 
 
+# ---------- Voice summary for the report ----------
+
+def voice_summary(answered):
+    """Averages over the spoken answers, or None if nothing was spoken."""
+    spoken = [q["voice"] for q in answered if q.get("voice")]
+    if not spoken:
+        return None
+
+    def avg(values):
+        values = [v for v in values if v is not None]
+        return round(sum(values) / len(values), 1) if values else None
+
+    return {
+        "spoken_answers": len(spoken),
+        "avg_seconds_before_speaking": avg(v["seconds_before_speaking"] for v in spoken),
+        "total_fillers": sum(len(v["signals"]["fillers"]) for v in spoken),
+        "total_long_pauses": sum(len(v["signals"]["pauses"]) for v in spoken),
+        "avg_words_per_minute": avg(v["signals"]["words_per_minute"] for v in spoken),
+        "avg_seconds_to_transcribe": avg(v["seconds_to_transcribe"] for v in spoken),
+    }
+
+
 # ---------- A viva session ----------
 
 class VivaSession:
@@ -208,6 +252,12 @@ class VivaSession:
     def done(self):
         return len(self.items) == self.total and "score" in self.items[-1]
 
+    def current(self):
+        """The question waiting for an answer, or None."""
+        if self.items and "score" not in self.items[-1]:
+            return self.items[-1]
+        return None
+
     def next_question(self):
         """Return the next question; it is usually ready already."""
         if self.items and "score" not in self.items[-1]:
@@ -215,12 +265,19 @@ class VivaSession:
         if len(self.items) >= self.total:
             return None
         t0 = time.time()
-        q = self._next.result()                 # waits only if not ready yet
+        i = len(self.items)
+        try:
+            q = self._next.result()             # waits only if not ready yet
+        except Exception:
+            # The background attempt failed (e.g. out of memory for a moment).
+            # Try once more now, so one bad moment doesn't end the viva.
+            self._next = self._pool.submit(make_question, self.chunks[i])
+            q = self._next.result()             # if this fails too, the error goes to the page
         q["seconds_waited"] = round(time.time() - t0, 1)
         q["number"] = len(self.items) + 1
         q["asked_at"] = time.time()
         self.items.append(q)
-        i = len(self.items)
+        i += 1
         self._next = self._pool.submit(make_question, self.chunks[i]) if i < self.total else None
         return q
 
@@ -252,6 +309,7 @@ class VivaSession:
             "revise_pages": sorted({q["page"] for q in answered if q["score"] < PASS_MARK}),
             "pages": pages,
             "grounded_questions": sum(q["grounded"] for q in answered),
+            "voice": voice_summary(answered),
             "questions": [{k: v for k, v in q.items() if k != "asked_at"} for q in answered],
         }
         if self.done:

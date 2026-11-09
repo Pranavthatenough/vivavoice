@@ -1,18 +1,20 @@
 """
-VivaVoice - Phase 3: web server.
+VivaVoice - web server (Phase 4: now with voice).
 
 Start it from the project folder:
     python backend/app.py
 Then open http://127.0.0.1:8000 in your browser.
 """
 import re
+import threading
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, UploadFile
+from fastapi import FastAPI, Form, HTTPException, Response, UploadFile
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from examiner import VivaSession
+import voice
+from examiner import ExaminerUnavailable, VivaSession
 from rag import ROOT, get_db, ingest
 
 UPLOADS = ROOT / "data" / "uploads"
@@ -28,6 +30,10 @@ class StartRequest(BaseModel):
 
 class AnswerRequest(BaseModel):
     answer: str
+
+
+class SpeakRequest(BaseModel):
+    text: str
 
 
 def get_session(sid):
@@ -75,7 +81,11 @@ def start_session(req: StartRequest):
     except Exception:
         raise HTTPException(404, f"No notes called '{req.notes}'. Upload them first.")
     sessions[s.id] = s
-    return {"session_id": s.id, "total": s.total, "question": public_question(s.next_question())}
+    try:
+        q = s.next_question()
+    except ExaminerUnavailable as e:
+        raise HTTPException(503, str(e))
+    return {"session_id": s.id, "total": s.total, "question": public_question(q)}
 
 
 @app.post("/api/sessions/{sid}/answer")
@@ -85,9 +95,13 @@ def answer(sid: str, req: AnswerRequest):
         r = s.answer(req.answer)
     except ValueError as e:
         raise HTTPException(409, str(e))
+    except ExaminerUnavailable as e:
+        # The answer isn't lost: the question stays open, so "Hand in answer" can be pressed again.
+        raise HTTPException(503, str(e))
     return {
         "score": r["score"],
         "feedback": r["feedback"],
+        "voice": r.get("voice"),
         "key_points": [{"point": p["point"], "covered": p["covered"], "span": p["span"]}
                        for p in r["key_points"]],
         "page": r["page"],
@@ -99,10 +113,54 @@ def answer(sid: str, req: AnswerRequest):
 @app.post("/api/sessions/{sid}/next")
 def next_question(sid: str):
     s = get_session(sid)
-    q = s.next_question()
+    try:
+        q = s.next_question()
+    except ExaminerUnavailable as e:
+        raise HTTPException(503, str(e))
     if q is None:
         raise HTTPException(409, "No questions left. Open the report.")
     return public_question(q)
+
+
+@app.post("/api/sessions/{sid}/transcribe")
+def transcribe(sid: str, audio: UploadFile, waited: float = Form(0.0)):
+    """
+    Speech-to-text for the current question.
+    `waited` = seconds between the question being ready and the microphone opening.
+    """
+    s = get_session(sid)
+    q = s.current()
+    if q is None:
+        raise HTTPException(409, "There is no question waiting for an answer.")
+    if not voice.stt_available():
+        raise HTTPException(501, "Speech-to-text isn't installed. Run: pip install faster-whisper")
+    data = audio.file.read()
+    if len(data) < 1000:
+        raise HTTPException(400, "The recording was empty. Check that the right microphone is selected.")
+    try:
+        t = voice.transcribe(data, context=q["question"])
+    except Exception as e:
+        raise HTTPException(500, f"Couldn't transcribe the recording: {e}")
+    first = t["signals"]["first_word_at"]
+    t["seconds_before_speaking"] = round(waited + first, 1) if first is not None else None
+    q["voice"] = {k: v for k, v in t.items() if k != "words"}   # saved with the session
+    return {"text": t["text"], "words": t["words"], "signals": t["signals"],
+            "seconds_before_speaking": t["seconds_before_speaking"],
+            "seconds_to_transcribe": t["seconds_to_transcribe"]}
+
+
+@app.get("/api/voice")
+def voice_status():
+    return {"stt": voice.stt_available(), "stt_model": voice.WHISPER_MODEL, "tts": voice.tts_engine()}
+
+
+@app.post("/api/speak")
+def speak(req: SpeakRequest):
+    """WAV audio from Piper. 404 tells the page to use the browser's own voice instead."""
+    wav = voice.speak(req.text[:1000])
+    if wav is None:
+        raise HTTPException(404, "Piper isn't set up; the browser will speak instead.")
+    return Response(wav, media_type="audio/wav")
 
 
 @app.get("/api/sessions/{sid}/report")
@@ -114,4 +172,5 @@ def report(sid: str):
 app.mount("/", StaticFiles(directory=ROOT / "frontend", html=True), name="frontend")
 
 if __name__ == "__main__":
+    threading.Thread(target=voice.warm_up, daemon=True).start()
     uvicorn.run(app, host="127.0.0.1", port=8000)
