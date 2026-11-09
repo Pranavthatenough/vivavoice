@@ -13,19 +13,42 @@ from fastapi import FastAPI, Form, HTTPException, Response, UploadFile
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+import examiner
 import voice
-from examiner import ExaminerUnavailable, VivaSession
+from examiner import LEVELS, PERSONAS, ExaminerUnavailable, VivaSession
 from rag import ROOT, get_db, ingest
 
 UPLOADS = ROOT / "data" / "uploads"
 MAX_UPLOAD_MB = 25
 
 app = FastAPI(title="VivaVoice")
+
+
+def load_models():
+    """
+    Load the LLM first, while memory is emptiest, then Whisper.
+    Doing it at startup means a memory problem shows up here, with a clear
+    message, instead of halfway through a viva.
+    """
+    error = examiner.free_memory_and_load()
+    if error:
+        print(f"\nThe examiner's model ({examiner.LLM_MODEL}) could not load: {error}")
+        print("Close other apps (especially browsers and games), then restart the server.\n")
+    else:
+        print(f"Examiner model ready ({examiner.LLM_MODEL}).")
+    voice.warm_up()
+
+
+@app.on_event("shutdown")
+def on_shutdown():
+    examiner.unload()
 sessions = {}   # session id -> VivaSession (kept in memory while the server runs)
 
 
 class StartRequest(BaseModel):
     notes: str
+    persona: str = "internal"
+    language: str = "en"
 
 
 class AnswerRequest(BaseModel):
@@ -44,7 +67,19 @@ def get_session(sid):
 
 def public_question(q):
     """What the student sees before answering: no key points, no evidence."""
-    return {"number": q["number"], "question": q["question"], "page": q["page"]}
+    return {"number": q["number"], "question": q["question"], "page": q["page"],
+            "level": LEVELS[q["level"]]["name"]}
+
+
+def persona_public(key):
+    p = PERSONAS[key]
+    return {"key": key, "name": p["name"], "about": p["about"],
+            "silence_ms": p["silence_ms"], "rate": p["rate"], "pitch": p["pitch"]}
+
+
+@app.get("/api/personas")
+def personas():
+    return [persona_public(k) for k in PERSONAS]
 
 
 @app.get("/api/notes")
@@ -75,7 +110,7 @@ def upload_notes(file: UploadFile):
 @app.post("/api/sessions")
 def start_session(req: StartRequest):
     try:
-        s = VivaSession(req.notes)
+        s = VivaSession(req.notes, req.persona, req.language)
     except ValueError as e:
         raise HTTPException(400, str(e))
     except Exception:
@@ -85,7 +120,8 @@ def start_session(req: StartRequest):
         q = s.next_question()
     except ExaminerUnavailable as e:
         raise HTTPException(503, str(e))
-    return {"session_id": s.id, "total": s.total, "question": public_question(q)}
+    return {"session_id": s.id, "total": s.total, "persona": persona_public(s.persona_key),
+            "language": s.language, "question": public_question(q)}
 
 
 @app.post("/api/sessions/{sid}/answer")
@@ -98,13 +134,19 @@ def answer(sid: str, req: AnswerRequest):
     except ExaminerUnavailable as e:
         # The answer isn't lost: the question stays open, so "Hand in answer" can be pressed again.
         raise HTTPException(503, str(e))
+    if r["stage"] == "follow_up":
+        return {"stage": "follow_up", "follow_up": r["follow_up"], "number": r["number"]}
     return {
+        "stage": "final",
         "score": r["score"],
         "feedback": r["feedback"],
         "voice": r.get("voice"),
-        "key_points": [{"point": p["point"], "covered": p["covered"], "span": p["span"]}
+        "follow_up": ({"question": r["follow_up"]["question"], "answer": r["follow_up"].get("answer"),
+                       "recovered": r["follow_up"].get("recovered")} if r.get("follow_up") else None),
+        "key_points": [{"point": p["point"], "status": p["status"], "span": p["span"]}
                        for p in r["key_points"]],
         "page": r["page"],
+        "level": LEVELS[r["level"]]["name"],
         "source_text": r["source_text"],
         "done": s.done,
     }
@@ -132,18 +174,19 @@ def transcribe(sid: str, audio: UploadFile, waited: float = Form(0.0)):
     q = s.current()
     if q is None:
         raise HTTPException(409, "There is no question waiting for an answer.")
+    target = q["follow_up"] if q["stage"] == "follow_up" else q   # where the voice data is saved
     if not voice.stt_available():
         raise HTTPException(501, "Speech-to-text isn't installed. Run: pip install faster-whisper")
     data = audio.file.read()
     if len(data) < 1000:
         raise HTTPException(400, "The recording was empty. Check that the right microphone is selected.")
     try:
-        t = voice.transcribe(data, context=q["question"])
+        t = voice.transcribe(data, context=s.prompt_text(), language=s.language)
     except Exception as e:
         raise HTTPException(500, f"Couldn't transcribe the recording: {e}")
     first = t["signals"]["first_word_at"]
     t["seconds_before_speaking"] = round(waited + first, 1) if first is not None else None
-    q["voice"] = {k: v for k, v in t.items() if k != "words"}   # saved with the session
+    target["voice"] = {k: v for k, v in t.items() if k != "words"}   # saved with the session
     return {"text": t["text"], "words": t["words"], "signals": t["signals"],
             "seconds_before_speaking": t["seconds_before_speaking"],
             "seconds_to_transcribe": t["seconds_to_transcribe"]}
@@ -172,5 +215,5 @@ def report(sid: str):
 app.mount("/", StaticFiles(directory=ROOT / "frontend", html=True), name="frontend")
 
 if __name__ == "__main__":
-    threading.Thread(target=voice.warm_up, daemon=True).start()
+    threading.Thread(target=load_models, daemon=True).start()
     uvicorn.run(app, host="127.0.0.1", port=8000)

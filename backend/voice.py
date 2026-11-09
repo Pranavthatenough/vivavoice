@@ -21,7 +21,17 @@ PAUSE_SECONDS = 1.5            # silences at least this long count as pauses
 # Whisper tends to clean up speech and drop "umm" and "uh". Starting the prompt
 # with fillers nudges it to write down exactly what was said, so we can count them.
 FILLER_PROMPT = "Umm, let me think. Uh, so, hmm, the answer is, basically, "
-FILLERS = re.compile(r"\b(u+m+|u+h+|e+r+m*|h+m+|a+h+|basically|you know|i mean)\b", re.I)
+
+# Whisper copies the style of its prompt. A code-mixed prompt (Hindi in Devanagari,
+# technical terms in English letters) steers it to write Hinglish the same way,
+# which keeps words like "drift velocity" exactly as the notes spell them.
+HINGLISH_PROMPT = "हाँ, तो umm, drift velocity basically electrons की average velocity है, मतलब जब electric field apply होता है। "
+
+# Fillers in English and Hindi. Word edges are checked by hand because Python's \b
+# doesn't handle Devanagari vowel signs.
+FILLERS = re.compile(
+    r"(?<![\w\u0900-\u097f])(u+h*m+|u+h+|e+r+m*|h+m+|a+h+|basically|you know|i mean|matlab|yaani|मतलब|यानी)(?![\w\u0900-\u097f])",
+    re.I)
 
 _lock = threading.Lock()       # one transcription at a time keeps the laptop responsive
 
@@ -53,20 +63,22 @@ def warm_up():
             print(f"Speech-to-text could not load: {e}")
 
 
-def transcribe(audio: bytes, context: str = ""):
+def transcribe(audio: bytes, context: str = "", language: str = "en"):
     """
     Turn a recorded answer into text, with a timestamp for every word.
     `context` is the question being answered. Putting it in Whisper's prompt
     makes subject words like "Wheatstone" or "drift velocity" come out right.
     Only the question goes in, never the key points: those would nudge Whisper
     towards "hearing" the right answer, and the grading would stop being fair.
+    `language` is "en" for English or "hinglish" for Hindi mixed with English.
     """
     t0 = time.time()
-    prompt = FILLER_PROMPT + context[:600]
+    hinglish = language == "hinglish"
+    prompt = (HINGLISH_PROMPT if hinglish else FILLER_PROMPT) + context[:600]
     with _lock:
         segments, info = whisper().transcribe(
             io.BytesIO(audio),
-            language="en",
+            language="hi" if hinglish else "en",
             initial_prompt=prompt,
             word_timestamps=True,
             vad_filter=True,                  # skip silence, stops Whisper inventing words in it

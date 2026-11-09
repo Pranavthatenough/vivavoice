@@ -204,6 +204,51 @@ mark { color: inherit; border-radius: 2px; padding: 0 1px; }
 
 .delivery { font: 1.1rem/1.6 var(--f-hand); color: var(--red); margin: 0 0 1.5rem; }
 
+/* ---------- Choosing the examiner (looks like a multiple-choice answer) ---------- */
+.choice { border: 0; padding: 0; margin: 0 0 1.75rem; }
+.choice legend { font-weight: 700; padding: 0; margin-bottom: 0.5rem; }
+.choice-options { display: grid; gap: 0.25rem; }
+.option {
+  display: grid; grid-template-columns: 1.6rem 1fr; column-gap: 0.6rem; align-items: baseline;
+  padding: 0.45rem 0; cursor: pointer;
+}
+.option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.option::before {
+  content: ""; grid-row: 1 / span 2; align-self: start; margin-top: 0.2rem;
+  width: 1.1rem; height: 1.1rem; border: 1.5px solid var(--pencil); border-radius: 50%;
+}
+.option:has(input:checked)::before {
+  border-color: var(--ink);
+  background: radial-gradient(circle, var(--ink) 0 45%, transparent 50%);
+}
+.option:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
+.option-name { font-family: var(--f-text); font-size: 1.1rem; }
+.option-about { grid-column: 2; color: var(--pencil); font-size: 0.9rem; }
+
+/* ---------- Difficulty tag and follow-ups ---------- */
+.level-tag {
+  position: absolute; right: 0.9rem; top: 3.3rem;
+  font: 400 0.95rem var(--f-hand); color: var(--pencil);
+}
+.probe { margin: 0 0 1.25rem; }
+.first-answer {
+  font: 1.1rem/1.6 var(--f-hand); color: var(--ink); opacity: 0.75;
+  margin: 0 0 0.75rem; padding-left: 0.75rem; border-left: 2px solid var(--rule);
+}
+.probe-q { font: 700 1.35rem/1.45 var(--f-hand); color: var(--red); margin: 0; }
+.points li.recovered::before { content: "\00BD"; font-size: 1.15rem; top: 0.25rem; }
+.hl-recovered { background: color-mix(in srgb, var(--covered) 55%, var(--missed)); }
+
+/* ---------- The difficulty ladder on the result sheet ---------- */
+.ladder svg { width: 100%; max-width: 30rem; height: auto; display: block; overflow: visible; }
+.ladder .rung { stroke: var(--rule); stroke-width: 1; }
+.ladder .rung-label { font: 0.8rem var(--f-ui); fill: var(--pencil); }
+.ladder .path { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.ladder .dot { fill: var(--paper); stroke: var(--red); stroke-width: 2.5; }
+.ladder .dot-score { font: 700 0.95rem var(--f-hand); fill: var(--red); text-anchor: middle; }
+.ladder .q-label { font: 0.8rem var(--f-ui); fill: var(--pencil); text-anchor: middle; }
+.pages li .pg-was { font-size: 0.7rem; }
+
 /* ---------- Small screens ---------- */
 @media (max-width: 600px) {
   :root { --margin-w: 3.6rem; }
@@ -211,6 +256,7 @@ mark { color: inherit; border-radius: 2px; padding: 0 1px; }
   .score-mark { width: 3.2rem; height: 2.4rem; font-size: 1.05rem; }
   .score-mark.big { width: 3.4rem; height: 2.6rem; font-size: 1.1rem; }
   .qnum { right: 0.6rem; }
+  .level-tag { right: 0.6rem; font-size: 0.8rem; }
   .timer { margin-left: 0; }
   .voice-settings { margin-left: 0; width: 100%; }
 }

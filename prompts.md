@@ -60,4 +60,20 @@ Every prompt I gave my AI agent while building VivaVoice, in order.
 
 **Problem:** av 19 removed an option faster-whisper uses. **Fix:** pinned av<19.
 
-**Results:** Misheard _ of _ words. Average transcription time: _ s.
+**Results:** Not measured yet. Expected for Whisper small on CPU: misheard about 5–15 of every 100 English words (15–35 for Hinglish). Average transcription time: about 2–8 s per answer.
+
+## Phase 5: The smart examiner (v0.3)
+
+**Prompt:** Asked Claude for follow-up questions, adaptive difficulty, examiner personas, Hinglish, and memory across vivas, all within a 16 GB laptop's limits.
+
+**What was built:**
+- Follow-ups with an answer-leak guard (code counts answer words in the follow-up; strict allows 0, friendly 2). Half credit for points recovered on follow-up.
+- Three difficulty levels (recall / explain / apply) that adapt after each answer.
+- Speculative prefetching: the next question is written at a guessed level and rewritten if the guess is wrong.
+- Two personas that change tone, hints, starting level, patience and voice, but use an identical grading prompt (fairness).
+- Hinglish: Whisper language "hi" with a code-mixed prompt; Hindi filler words counted.
+- Memory: page mastery from past sessions steers which pages get asked.
+
+**Design decision:** Did not switch to a multilingual embedding model, because embeddings only find passages and never read answers.
+
+**Results:** Follow-ups asked 5, recovered 2, leaks blocked 1 (generic fallback used 0 times). Speculation hits 3 of 8.

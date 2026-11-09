@@ -11,8 +11,11 @@ const state = {
   turn: 0,              // goes up on every new question; old async work checks it and stops
   stt: false,           // speech-to-text available on the server
   tts: "browser",       // "piper" or "browser"
+  persona: null,        // the examiner for this viva: voice speed, pitch, patience
+  stage: "open",        // "open" or "follow_up"
 };
-const settings = { speak: true, handsFree: false };
+const settings = { speak: true, handsFree: false, persona: "internal", language: "en" };
+const LEVEL_NAMES = ["recall", "explain", "apply"];
 
 // ---------- Helpers ----------
 
@@ -59,7 +62,7 @@ function listWords(items) {
 function highlight(text, points) {
   const spans = points
     .filter((p) => p.span)
-    .map((p) => ({ start: p.span[0], end: p.span[1], cls: p.covered ? "hl-covered" : "hl-missed" }))
+    .map((p) => ({ start: p.span[0], end: p.span[1], cls: `hl-${p.status}` }))
     .sort((a, b) => a.start - b.start);
   let html = "", pos = 0;
   for (const s of spans) {
@@ -85,16 +88,36 @@ function loadSettings() {
   } catch { /* storage blocked: use defaults */ }
   $("opt-speak").checked = settings.speak;
   $("opt-handsfree").checked = settings.handsFree;
+  const lang = document.querySelector(`input[name="language"][value="${settings.language}"]`);
+  if (lang) lang.checked = true;
 }
 
 function saveSettings() {
   settings.speak = $("opt-speak").checked;
   settings.handsFree = $("opt-handsfree").checked;
+  settings.persona = document.querySelector('input[name="persona"]:checked')?.value || "internal";
+  settings.language = document.querySelector('input[name="language"]:checked')?.value || "en";
   try { localStorage.setItem("vivavoice-settings", JSON.stringify(settings)); } catch { /* ignore */ }
   if (!settings.speak) stopSpeaking();
 }
 $("opt-speak").addEventListener("change", saveSettings);
 $("opt-handsfree").addEventListener("change", saveSettings);
+document.querySelectorAll('input[name="language"]').forEach((el) => el.addEventListener("change", saveSettings));
+
+async function loadPersonas() {
+  try {
+    const list = await api("/api/personas");
+    $("persona-options").innerHTML = list
+      .map((p) => `<label class="option"><input type="radio" name="persona" value="${p.key}"${p.key === settings.persona ? " checked" : ""}>
+        <span class="option-name">${escapeHTML(p.name)}</span>
+        <span class="option-about">${escapeHTML(p.about)}</span></label>`)
+      .join("");
+    if (!document.querySelector('input[name="persona"]:checked')) document.querySelector('input[name="persona"]').checked = true;
+    document.querySelectorAll('input[name="persona"]').forEach((el) => el.addEventListener("change", saveSettings));
+  } catch {
+    $("persona-choice").hidden = true;
+  }
+}
 
 // ---------- The examiner's voice ----------
 
@@ -144,7 +167,8 @@ async function speak(text) {
     const u = new SpeechSynthesisUtterance(text);
     const v = pickBrowserVoice();
     if (v) u.voice = v;
-    u.rate = 0.98;
+    u.rate = state.persona?.rate ?? 0.98;
+    u.pitch = state.persona?.pitch ?? 1;
     // Safety net: some browsers never fire "end".
     const timer = setTimeout(resolve, 4000 + text.length * 90);
     const finish = () => { clearTimeout(timer); resolve(); };
@@ -158,7 +182,8 @@ async function speak(text) {
 
 // ---------- The examiner's ears: recording with automatic stop ----------
 
-const SILENCE_TO_STOP_MS = 2000;   // stop after this much quiet once you've started talking
+// How long a silence ends your answer depends on the examiner: the strict one is less patient.
+const silenceToStop = () => state.persona?.silence_ms ?? 2000;
 const NOTHING_HEARD_MS = 12000;    // give up if you haven't said anything by then
 const MAX_RECORDING_MS = 90000;
 
@@ -203,7 +228,7 @@ async function startRecording() {
   recorder.start(250);
   $("mic-btn").setAttribute("aria-pressed", "true");
   $("mic-label").textContent = "Stop";
-  setStatus("mic-status", "Listening. Stop talking for 2 seconds when you're done.");
+  setStatus("mic-status", `Listening. Stop talking for ${silenceToStop() / 1000} seconds when you're done.`);
 
   const r = rec;
   const tick = () => {
@@ -228,7 +253,7 @@ async function startRecording() {
 
     $("mic-btn").style.setProperty("--level", Math.min(1, rms / (threshold * 3)).toFixed(2));
 
-    if (r.heardSpeech && r.quietSince && now - r.quietSince > SILENCE_TO_STOP_MS) return stopRecording();
+    if (r.heardSpeech && r.quietSince && now - r.quietSince > silenceToStop()) return stopRecording();
     if (!r.heardSpeech && elapsed > NOTHING_HEARD_MS) return stopRecording();
     if (elapsed > MAX_RECORDING_MS) return stopRecording();
     requestAnimationFrame(tick);
@@ -341,11 +366,13 @@ async function startViva(notes, btn) {
   btn.disabled = true;
   setStatus("home-status", "The examiner is reading your notes and writing the first question. The first one can take up to a minute.");
   try {
-    const data = await postJSON("/api/sessions", { notes });
+    saveSettings();
+    const data = await postJSON("/api/sessions", { notes, persona: settings.persona, language: settings.language });
     state.sessionId = data.session_id;
+    state.persona = data.persona;
     state.total = data.total;
     state.done = false;
-    $("topbar-note").textContent = prettyName(notes);
+    $("topbar-note").textContent = `${prettyName(notes)}, ${data.persona.name.toLowerCase()}`;
     setStatus("home-status", "");
     show("viva");
     showQuestion(data.question);
@@ -360,6 +387,9 @@ async function showQuestion(q) {
   const turn = ++state.turn;
   if (rec) stopRecording();
   $("qnum").textContent = `Q${q.number}`;
+  $("level-tag").textContent = q.level;
+  state.stage = "open";
+  $("probe").hidden = true;
   $("progress").textContent = `Question ${q.number} of ${state.total}`;
   $("question").textContent = q.question;
   $("answer").value = "";
@@ -418,7 +448,8 @@ $("answer-form").addEventListener("submit", async (e) => {
     const r = await postJSON(`/api/sessions/${state.sessionId}/answer`, { answer });
     if (turn !== state.turn) return;
     setStatus("viva-status", "");
-    showMarking(r, turn);
+    if (r.stage === "follow_up") showFollowUp(r, answer);
+    else showMarking(r, turn);
   } catch (err) {
     setStatus("viva-status", err.message, true);
     $("answer").disabled = false;
@@ -430,6 +461,31 @@ $("answer-form").addEventListener("submit", async (e) => {
 $("answer").addEventListener("keydown", (e) => {
   if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) $("answer-form").requestSubmit();
 });
+
+// The examiner presses further. Your first answer stays visible; the probe is in red pen.
+async function showFollowUp(r, firstAnswer) {
+  const turn = ++state.turn;     // a new turn: recordings for the first answer are now stale
+  state.stage = "follow_up";
+  $("first-answer").textContent = firstAnswer;
+  $("probe-q").textContent = r.follow_up;
+  $("probe").hidden = false;
+  $("answer").value = "";
+  $("answer").disabled = false;
+  $("submit-btn").disabled = false;
+  $("mic-btn").disabled = false;
+  $("progress").textContent = `Question ${r.number} of ${state.total}, follow-up`;
+  setStatus("mic-status", "");
+  $("probe").scrollIntoView({ block: "nearest" });
+
+  state.questionReadyAt = performance.now();
+  if (settings.speak) {
+    await speak(r.follow_up);
+    if (turn !== state.turn) return;
+    state.questionReadyAt = performance.now();
+  }
+  if (settings.handsFree && state.stt && !rec && turn === state.turn) startRecording();
+  else if (!rec) $(state.stt ? "mic-btn" : "answer").focus();
+}
 
 // One line in the examiner's hand about how the answer was spoken.
 function describeDelivery(v) {
@@ -455,7 +511,7 @@ async function showMarking(r, turn) {
   $("score-text").textContent = `${r.score}/5`;
   $("feedback").textContent = r.feedback;
   $("points").innerHTML = r.key_points
-    .map((p) => `<li class="${p.covered ? "covered" : "missed"}"><span class="sr-only">${p.covered ? "Covered: " : "Missed: "}</span>${escapeHTML(p.point)}</li>`)
+    .map((p) => `<li class="${p.status}"><span class="sr-only">${{ covered: "Covered: ", recovered: "Got it when asked again: ", missed: "Missed: " }[p.status]}</span>${escapeHTML(p.point)}</li>`)
     .join("");
   const delivery = describeDelivery(r.voice);
   $("delivery").textContent = delivery;
@@ -509,10 +565,20 @@ async function showReport() {
       .map((p) => {
         const level = p.score === null ? "" : p.score >= 4 ? "ok" : p.score >= 2.5 ? "weak" : "bad";
         const label = p.score === null ? "not asked" : `${p.score}/5`;
-        return `<li ${level ? `data-level="${level}"` : ""} aria-label="Page ${p.page}: ${label}">
-          <span>p${p.page}</span><span class="pg-score">${p.score === null ? "" : p.score}</span></li>`;
+        const was = p.before === null || p.before === undefined ? "" : `was ${Math.round(p.before * 10) / 10}`;
+        return `<li ${level ? `data-level="${level}"` : ""} aria-label="Page ${p.page}: ${label}${was ? `, ${was} before` : ""}">
+          <span>p${p.page}</span><span class="pg-score">${p.score === null ? "" : p.score}</span><span class="pg-was">${was}</span></li>`;
       })
       .join("");
+
+    drawLadder(rep);
+    const fu = rep.follow_ups;
+    const notes = [];
+    if (fu.asked) notes.push(`The examiner asked ${fu.asked} follow-up${fu.asked > 1 ? "s" : ""} and you recovered ${fu.recovered}.`);
+    const sp = rep.speculation, bets = sp.hits + sp.misses;
+    if (bets) notes.push(`While you answered, the next question was written in advance at a guessed level. The guess was right ${sp.hits} of ${bets} times.`);
+    if (rep.earlier_vivas) notes.push(`Questions leaned towards the pages you found hard in your ${rep.earlier_vivas} earlier viva${rep.earlier_vivas > 1 ? "s" : ""}.`);
+    $("ladder-note").textContent = notes.join(" ");
 
     const v = rep.voice;
     $("voice-report").hidden = !v;
@@ -526,7 +592,7 @@ async function showReport() {
 
     $("q-list").innerHTML = rep.questions
       .map((q) => `<li>${escapeHTML(q.question)}
-        <span class="q-meta"><span class="q-score">${q.score}/5</span> from page ${q.page}, answered in ${q.seconds_to_answer}s</span></li>`)
+        <span class="q-meta"><span class="q-score">${q.score}/5</span> ${LEVEL_NAMES[q.level]} question from page ${q.page}${q.follow_up ? (q.follow_up.recovered ? ", recovered on follow-up" : ", follow-up missed") : ""}</span></li>`)
       .join("");
 
     show("report");
@@ -535,6 +601,26 @@ async function showReport() {
   } catch (err) {
     setStatus("viva-status", err.message, true);
   }
+}
+
+// The difficulty ladder: one red-pen line through every question, at its level.
+function drawLadder(rep) {
+  const qs = rep.questions;
+  if (!qs.length) { $("ladder").innerHTML = ""; return; }
+  const W = 480, left = 70, right = 20, top = 16, gap = 44;
+  const y = (lvl) => top + (2 - lvl) * gap;
+  const x = (i) => (qs.length === 1 ? (left + W - right) / 2 : left + (i * (W - left - right)) / (qs.length - 1));
+  const rungs = LEVEL_NAMES.map((name, lvl) =>
+    `<line class="rung" x1="${left - 14}" x2="${W - right + 14}" y1="${y(lvl)}" y2="${y(lvl)}"/>
+     <text class="rung-label" x="0" y="${y(lvl) + 4}">${name[0].toUpperCase() + name.slice(1)}</text>`).join("");
+  const pts = qs.map((q, i) => [x(i), y(q.level)]);
+  const path = pts.map(([px, py], i) => `${i ? "L" : "M"}${px} ${py}`).join(" ");
+  const dots = qs.map((q, i) => `<circle class="dot" cx="${pts[i][0]}" cy="${pts[i][1]}" r="6"/>
+     <text class="dot-score" x="${pts[i][0]}" y="${pts[i][1] - 12}">${q.score}</text>
+     <text class="q-label" x="${pts[i][0]}" y="${top + 2 * gap + 30}">Q${i + 1}</text>`).join("");
+  $("ladder").innerHTML = `<svg viewBox="0 0 ${W} ${top + 2 * gap + 40}" role="img"
+    aria-label="Difficulty by question: ${qs.map((q, i) => `Q${i + 1} ${LEVEL_NAMES[q.level]}, scored ${q.score}`).join("; ")}">
+    ${rungs}<path class="path" d="${path}"/>${dots}</svg>`;
 }
 
 // ---------- Navigation ----------
@@ -560,9 +646,11 @@ async function checkVoice() {
     state.tts = v.tts;
   } catch { /* text mode only */ }
   if (!state.stt) $("opt-handsfree").closest("label").hidden = true;
+  $("language-choice").hidden = !state.stt;
 }
 
 if ("speechSynthesis" in window) speechSynthesis.getVoices();   // starts loading the voice list
 loadSettings();
 checkVoice();
+loadPersonas();
 loadNotes();

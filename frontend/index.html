@@ -26,7 +26,23 @@
         <div class="margin"></div>
         <div class="body">
           <h1>Your examiner is ready.</h1>
-          <p class="lead">Pick the notes you want to be examined on. You'll get five questions, one at a time, and every mark comes with the lines from your notes that it was based on.</p>
+          <p class="lead">Pick your examiner and your notes. You'll get five questions, one at a time, and every mark comes with the lines from your notes that it was based on.</p>
+
+          <fieldset class="choice" id="persona-choice">
+            <legend>Who examines you</legend>
+            <div class="choice-options" id="persona-options"></div>
+          </fieldset>
+
+          <fieldset class="choice" id="language-choice" hidden>
+            <legend>You'll answer in</legend>
+            <div class="choice-options">
+              <label class="option"><input type="radio" name="language" value="en" checked>
+                <span class="option-name">English</span></label>
+              <label class="option"><input type="radio" name="language" value="hinglish">
+                <span class="option-name">Hinglish</span>
+                <span class="option-about">Hindi and English mixed. The examiner still asks in English.</span></label>
+            </div>
+          </fieldset>
 
           <ul class="notes-list" id="notes-list"></ul>
 
@@ -43,10 +59,16 @@
     <!-- Viva: one question at a time -->
     <section id="screen-viva" class="screen" hidden>
       <div class="row">
-        <div class="margin"><span class="qnum" id="qnum"></span></div>
+        <div class="margin"><span class="qnum" id="qnum"></span><span class="level-tag" id="level-tag"></span></div>
         <div class="body">
           <p class="progress" id="progress"></p>
           <h2 class="question" id="question"></h2>
+
+          <!-- Follow-up: your first answer, then the examiner's probe in red pen -->
+          <div class="probe" id="probe" hidden>
+            <p class="first-answer" id="first-answer"></p>
+            <p class="probe-q"><span class="sr-only">Follow-up question: </span><span id="probe-q"></span></p>
+          </div>
 
           <div class="mic-row" id="mic-row">
             <button type="button" class="mic" id="mic-btn" aria-pressed="false">
@@ -84,7 +106,7 @@
           <figure class="excerpt">
             <figcaption id="excerpt-caption"></figcaption>
             <blockquote id="excerpt"></blockquote>
-            <p class="legend"><mark class="hl-covered">You covered this</mark> <mark class="hl-missed">You missed this</mark></p>
+            <p class="legend"><mark class="hl-covered">You covered this</mark> <mark class="hl-recovered">You got this when asked again</mark> <mark class="hl-missed">You missed this</mark></p>
           </figure>
           <button class="btn" id="next-btn" type="button"></button>
         </div>
@@ -107,6 +129,10 @@
           <h3>Your notes, page by page</h3>
           <ol class="pages" id="pages"></ol>
           <p class="hint">Darker means a lower score. Blank pages weren't asked about this time.</p>
+
+          <h3>How the examiner adapted</h3>
+          <div class="ladder" id="ladder"></div>
+          <p class="hint" id="ladder-note"></p>
 
           <div id="voice-report" hidden>
             <h3>How you spoke</h3>
