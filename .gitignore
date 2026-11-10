@@ -1,7 +1,14 @@
+# Python
 venv/
 __pycache__/
+*.pyc
 .env
+
+# Your data: vivas, uploads, the vector store, eval work in progress
 data/
-uploads/
-*.wav
+
+# Your voice: recordings and downloaded voice models stay on your laptop
 evals/voice/
+voices/
+*.wav
+*.m4a

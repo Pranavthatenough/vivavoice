@@ -43,17 +43,30 @@ def model_points(q):
     return [(p["point"], bool(p.get("covered", p.get("status") == "covered"))) for p in kps]
 
 
+def question_number(q, index):
+    """A question's number in its viva. Phase 2 (terminal) vivas didn't save one, so use the position."""
+    return q.get("number") or index + 1
+
+
+def find_question(session, num):
+    """The question with this number in a saved viva, or None."""
+    for i, q in enumerate((session or {}).get("questions", [])):
+        if str(question_number(q, i)) == str(num):
+            return q
+    return None
+
+
 def items():
     out = []
     for path in sorted(SESSIONS.glob("*.json")) if SESSIONS.exists() else []:
         data = _read(path)
-        for q in data.get("questions", []):
+        for i, q in enumerate(data.get("questions", [])):
             answer = (q.get("answer") or "").strip()
             points = [p for p, _ in model_points(q)]
             if not points or answer.lower().rstrip(".!") in ("", "pass", "skip", "idk"):
                 continue
             out.append({
-                "id": f"grade/{path.stem}/{q.get('number', 0)}", "type": "grading",
+                "id": f"grade/{path.stem}/{question_number(q, i)}", "type": "grading",
                 "question": q.get("question", ""), "answer": answer, "points": points,
                 "excerpt": q.get("source_text", ""), "page": q.get("page"),
                 "language": data.get("language", "en"),

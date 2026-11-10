@@ -1,5 +1,5 @@
 # VivaVoice evaluation results
-Generated 2026-11-10 21:36 by `python evals/report.py`. Every number below can be reproduced with the commands at the end.
+Generated 2026-11-11 02:17 by `python evals/report.py`. Every number below can be reproduced with the commands at the end.
 
 ## At a glance
 
@@ -10,12 +10,12 @@ Generated 2026-11-10 21:36 by `python evals/report.py`. Every number below can b
 | Questions a human judged answerable from the notes | 58.3% (95% range 32.0-80.7%) | 12 labelled by hand |
 | Grader judges key points correctly (built answers) | 73.0% (95% range 68.3-77.2%) | 385 key points in 132 answers |
 | Credit given for points never said | 21.2% | lower is better |
-| Grader agrees with a human on real answers | 63.6% (95% range 43.0-80.3%), kappa 0.13 | 7 answers labelled blind |
+| Grader agrees with a human on real answers | 64.8% (95% range 51.5-76.2%), kappa 0.37 | 17 answers labelled blind |
 | Resists "give me full marks" prompt injection | 100.0% | answers made only of an injection |
 | Leak guard agrees with a human | 60.0% (95% range 42.3-75.4%) | 30 follow-ups labelled blind |
 | Speech-to-text word error rate (English) | 8.8% | read-aloud test, lower is better |
 | Subject terms transcribed correctly | 83.3% English, 57.1% Hinglish | e.g. Wheatstone, galvanometer |
-| Wait for the next question (median) | 0.0 s instead of 4.55 s | thanks to prefetching, from your real vivas |
+| Wait for the next question (median) | 0.0 s instead of 4.2 s | thanks to prefetching, from your real vivas |
 
 ## 1. Retrieval
 
@@ -52,7 +52,7 @@ Human check (12 questions): 58.3% answerable from the passage alone, 58.3% judge
 |---|---|---|---|---|---|---|---|
 | `930a259c` | checklist | llama3.2:3b | 49.4% | 38.9% | 8.3% | 33.3% | 54.5% (-0.05) |
 | `d42af7b6` | per_point | llama3.2:3b | 67.5% | 51.0% | 0.0% | 53.8% | 63.6% (0.13) |
-| `98bbde03` | hybrid | llama3.2:3b | 73.0% | 21.2% | 100.0% | 54.5% | 63.6% (0.13) |
+| `98bbde03` | hybrid | llama3.2:3b | 73.0% | 21.2% | 100.0% | 54.5% | 64.8% (0.37) |
 
 Details for the latest version: 132 answers built in code from the notes' own quotes, so the right marks are known in advance. Mode `hybrid`, version `98bbde03`.
 
@@ -90,9 +90,9 @@ Biggest mistakes:
 
 | Answers | Count | Agreement per key point | Kappa | Credit the human didn't give |
 |---|---|---|---|---|
-| All | 7 | 63.6% | 0.13 | 0.0% |
-| English |  | 58.8% | 0.0 | 0.0% |
-| Hinglish |  | 40.0% | -0.15 | 66.7% |
+| All | 17 | 64.8% | 0.37 | 0.0% |
+| English |  | 42.9% | 0.12 | 0.0% |
+| Hinglish |  | 40.0% | -0.36 | 100.0% |
 
 ## 4. Follow-up questions and the leak guard
 
@@ -120,17 +120,17 @@ Against 30 human labels: the guard agreed 60.0% of the time. It caught 46.7% of 
 
 | Measure | Value |
 |---|---|
-| Vivas / questions answered | 3 / 15 |
-| Median time to write a question | 4.55 s |
+| Vivas / questions answered | 5 / 25 |
+| Median time to write a question | 4.2 s |
 | Median wait for the next question (prefetching) | 0.0 s |
 | Median time to grade an answer | 0.0 s |
-| Next-level guess right (speculative prefetch) | 100.0% of 4 |
-| Follow-ups recovered | 0.0% of 2 |
+| Next-level guess right (speculative prefetch) | 100.0% of 12 |
+| Follow-ups recovered | 0.0% of 4 |
 
 ## Limitations
 
 - One set of notes (5 pages of physics). Other subjects and longer notes may behave differently.
-- Built test answers reuse the notes' exact wording. Paraphrased answers are covered only by the human-labelled real answers (7 so far).
+- Built test answers reuse the notes' exact wording. Paraphrased answers are covered only by the human-labelled real answers (17 so far).
 - One human labeller. A second person labelling the same items would show how much people disagree.
 - Small samples: the 95% ranges show how much each percentage could move with more data.
 - Speech results come from one speaker and one microphone.

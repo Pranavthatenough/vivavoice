@@ -5,23 +5,23 @@
   "answers": 132,
   "questions": 12,
   "human": {
-    "answers": 7,
+    "answers": 17,
     "points": {
-      "n": 22,
-      "tp": 1,
+      "n": 54,
+      "tp": 19,
       "fp": 0,
-      "fn": 8,
-      "tn": 13,
-      "accuracy": 63.6,
+      "fn": 19,
+      "tn": 16,
+      "accuracy": 64.8,
       "accuracy_range": [
-        43.0,
-        80.3
+        51.5,
+        76.2
       ],
       "precision": 100.0,
-      "recall": 11.1,
+      "recall": 50.0,
       "false_positive_rate": 0.0,
-      "false_negative_rate": 88.9,
-      "kappa": 0.13
+      "false_negative_rate": 50.0,
+      "kappa": 0.37
     }
   },
   "points": {

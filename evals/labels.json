@@ -1,9 +1,9 @@
 {
   "grade/cloud_computing_20261110_205425/1": {
-    "at": "2026-11-10 21:07",
+    "at": "2026-11-11 02:16",
     "value": [
-      false,
-      false
+      true,
+      true
     ]
   },
   "grade/cloud_computing_20261110_205425/2": {
@@ -12,6 +12,22 @@
       false,
       true,
       true
+    ]
+  },
+  "grade/machine_learning_20261111_015825/2": {
+    "at": "2026-11-11 02:02",
+    "value": [
+      false,
+      false,
+      false
+    ]
+  },
+  "grade/machine_learning_20261111_015825/4": {
+    "at": "2026-11-11 02:02",
+    "value": [
+      true,
+      false,
+      false
     ]
   },
   "grade/physics_current_20261108_230943/0": {
@@ -23,12 +39,78 @@
       false
     ]
   },
+  "grade/physics_current_20261108_230943/1": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261108_230943/2": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261108_230943/3": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
   "grade/physics_current_20261108_231244/0": {
     "at": "2026-11-10 21:07",
     "value": [
       false,
       false,
       false
+    ]
+  },
+  "grade/physics_current_20261108_231244/1": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261108_231244/2": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261108_231244/3": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261108_231244/4": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261108_231244/5": {
+    "at": "2026-11-11 02:15",
+    "value": [
+      true,
+      true,
+      true
     ]
   },
   "grade/physics_current_20261109_104511/1": {
@@ -74,7 +156,7 @@
     ]
   },
   "ground/x01": {
-    "at": "2026-11-10 21:08",
+    "at": "2026-11-11 02:16",
     "value": {
       "answerable": true,
       "level_ok": true
@@ -164,7 +246,7 @@
     }
   },
   "leak/x01-internal-1": {
-    "at": "2026-11-10 21:09",
+    "at": "2026-11-11 02:16",
     "value": {
       "gives_away": true
     }

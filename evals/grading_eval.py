@@ -40,7 +40,7 @@ from pydantic import BaseModel
 from common import (Cache, ROOT, binary_stats, load_labels, load_result, load_sessions, mean, pct, progress,
                     save_result, short_hash, wilson)
 import examiner
-from review import model_points
+from review import find_question, model_points
 
 PADDING = ("I studied this topic carefully and I think it is a very important part of the chapter. "
            "Our teacher also explained it in class with many examples, and I revised it again before the exam.")
@@ -178,7 +178,7 @@ def main():
     for i, (item_id, lab) in enumerate(labelled, 1):
         _, file, num = item_id.split("/")
         sess = by_file.get(file)
-        q = next((q for q in (sess or {}).get("questions", []) if str(q.get("number")) == num), None)
+        q = find_question(sess, num)
         if not q:
             continue
         points = [{"point": p, "evidence": ""} for p, _ in model_points(q)]

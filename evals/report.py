@@ -9,7 +9,7 @@ import json
 
 from common import (EVALS, RESULTS, ROOT, binary_stats, load_labels, load_result, load_sessions, mean, pct,
                     percentile, wilson)
-from review import model_points
+from review import find_question, model_points
 
 OUT = EVALS / "RESULTS.md"
 
@@ -38,7 +38,7 @@ def grading_agreement(labels, sessions):
             continue
         _, file, num = item_id.split("/")
         s = by_file.get(file)
-        q = next((q for q in (s or {}).get("questions", []) if str(q.get("number")) == num), None)
+        q = find_question(s, num)
         if not q:
             continue
         model = [c for _, c in model_points(q)]
