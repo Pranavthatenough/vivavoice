@@ -63,6 +63,28 @@ def warm_up():
             print(f"Speech-to-text could not load: {e}")
 
 
+def build_prompt(context="", language="en"):
+    """Whisper's prompt: a style example (fillers, or Hinglish) followed by the question."""
+    return (HINGLISH_PROMPT if language == "hinglish" else FILLER_PROMPT) + context[:600]
+
+
+def run_whisper(model, audio: bytes, prompt: str, language: str = "en"):
+    """
+    The one place Whisper is called, so the app and the evaluation (evals/voice_eval.py)
+    always use exactly the same settings. Returns (segments, info).
+    """
+    segments, info = model.transcribe(
+        io.BytesIO(audio),
+        language="hi" if language == "hinglish" else "en",
+        initial_prompt=prompt,
+        word_timestamps=True,
+        vad_filter=True,                  # skip silence, stops Whisper inventing words in it
+        condition_on_previous_text=False,
+        beam_size=5,
+    )
+    return list(segments), info           # list() is where the actual work happens
+
+
 def transcribe(audio: bytes, context: str = "", language: str = "en"):
     """
     Turn a recorded answer into text, with a timestamp for every word.
@@ -73,19 +95,8 @@ def transcribe(audio: bytes, context: str = "", language: str = "en"):
     `language` is "en" for English or "hinglish" for Hindi mixed with English.
     """
     t0 = time.time()
-    hinglish = language == "hinglish"
-    prompt = (HINGLISH_PROMPT if hinglish else FILLER_PROMPT) + context[:600]
     with _lock:
-        segments, info = whisper().transcribe(
-            io.BytesIO(audio),
-            language="hi" if hinglish else "en",
-            initial_prompt=prompt,
-            word_timestamps=True,
-            vad_filter=True,                  # skip silence, stops Whisper inventing words in it
-            condition_on_previous_text=False,
-            beam_size=5,
-        )
-        segments = list(segments)             # the actual work happens here
+        segments, info = run_whisper(whisper(), audio, build_prompt(context, language), language)
     words = [{"word": w.word.strip(), "start": round(w.start, 2), "end": round(w.end, 2)}
              for s in segments for w in (s.words or []) if w.word.strip()]
     text = " ".join(s.text.strip() for s in segments).strip()

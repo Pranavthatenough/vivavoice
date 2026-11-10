@@ -1,0 +1,569 @@
+{
+  "model": "llama3.2:3b",
+  "prompt_version": "eaf5d163",
+  "summary": {
+    "internal": {
+      "name": "Friendly internal",
+      "hint_words_allowed": 2,
+      "cases": 12,
+      "first_try_accepted": 100.0,
+      "fallback_used": 0.0,
+      "tries_rejected": 0,
+      "avg_leaked_words_when_rejected": null,
+      "most_leaked_words": []
+    },
+    "external": {
+      "name": "Strict external",
+      "hint_words_allowed": 0,
+      "cases": 12,
+      "first_try_accepted": 50.0,
+      "fallback_used": 41.7,
+      "tries_rejected": 11,
+      "avg_leaked_words_when_rejected": 1.36,
+      "most_leaked_words": [
+        "formula",
+        "change",
+        "collision",
+        "move",
+        "direction",
+        "additive",
+        "result",
+        "frequent"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "x01-internal",
+      "exam_id": "x01",
+      "persona": "internal",
+      "question": "State the unit of resistance in Ohm's Law.",
+      "student_answer": "The constant R is the resistance of the conductor.",
+      "missing_point": "One ohm is the resistance of a conductor through which one ampere flows when one volt is applied across it.",
+      "evidence": "One ohm is the resistance of a conductor through which one ampere flows when one volt is applied across it.",
+      "final": "Does that unit, one ohm, apply equally to conductors in series?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x01-internal-1",
+          "question": "Does that unit, one ohm, apply equally to conductors in series?",
+          "leaked": [
+            "one"
+          ],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x01-external",
+      "exam_id": "x01",
+      "persona": "external",
+      "question": "State the unit of resistance in Ohm's Law.",
+      "student_answer": "The constant R is the resistance of the conductor.",
+      "missing_point": "One ohm is the resistance of a conductor through which one ampere flows when one volt is applied across it.",
+      "evidence": "One ohm is the resistance of a conductor through which one ampere flows when one volt is applied across it.",
+      "final": "Is this unit applicable to all conductors, regardless of their material?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x01-external-1",
+          "question": "Is this unit applicable to all conductors, regardless of their material?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x02-internal",
+      "exam_id": "x02",
+      "persona": "internal",
+      "question": "Why does a higher voltage V mean a lower current I in the equation a fixed power P = VI?",
+      "student_answer": "V = I R ohm (Ω)",
+      "missing_point": "The equation a fixed power P = VI implies that power is directly proportional to voltage and inversely proportional to current.",
+      "evidence": "a fixed power P = VI",
+      "final": "How does the relationship between power and voltage change when the current remains constant?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x02-internal-1",
+          "question": "How does the relationship between power and voltage change when the current remains constant?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x02-external",
+      "exam_id": "x02",
+      "persona": "external",
+      "question": "Why does a higher voltage V mean a lower current I in the equation a fixed power P = VI?",
+      "student_answer": "V = I R ohm (Ω)",
+      "missing_point": "The equation a fixed power P = VI implies that power is directly proportional to voltage and inversely proportional to current.",
+      "evidence": "a fixed power P = VI",
+      "final": "Does the proportionality imply that a decrease in current would be required to maintain a fixed power, assuming a constant voltage?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x02-external-1",
+          "question": "Does the proportionality imply that a decrease in current would be required to maintain a fixed power, assuming a constant voltage?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x03-internal",
+      "exam_id": "x03",
+      "persona": "internal",
+      "question": "If the three resistors in the worked example are replaced with 2 Ω, 3 Ω, and 6 Ω resistors, what would be the resistance of the parallel circuit?",
+      "student_answer": "For two resistors, Rp = R1R2 / (R1 + R2).",
+      "missing_point": "The same formula applies to any number of resistors in a parallel circuit.",
+      "evidence": "For two resistors, Rp = R1R2 / (R1 + R2).",
+      "final": "Does this formula hold true regardless of the total number of resistors in the circuit?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x03-internal-1",
+          "question": "Does this formula hold true regardless of the total number of resistors in the circuit?",
+          "leaked": [
+            "formula",
+            "number"
+          ],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x03-external",
+      "exam_id": "x03",
+      "persona": "external",
+      "question": "If the three resistors in the worked example are replaced with 2 Ω, 3 Ω, and 6 Ω resistors, what would be the resistance of the parallel circuit?",
+      "student_answer": "For two resistors, Rp = R1R2 / (R1 + R2).",
+      "missing_point": "The same formula applies to any number of resistors in a parallel circuit.",
+      "evidence": "For two resistors, Rp = R1R2 / (R1 + R2).",
+      "final": "That's incomplete. What else is involved?",
+      "fallback": true,
+      "tries": [
+        {
+          "id": "x03-external-1",
+          "question": "How does the number of resistors in a parallel circuit affect the formula?",
+          "leaked": [
+            "formula",
+            "number"
+          ],
+          "accepted": false
+        },
+        {
+          "id": "x03-external-2",
+          "question": "Can you apply this formula to three resistors, R1, R2, and R3, in a parallel circuit?",
+          "leaked": [
+            "formula"
+          ],
+          "accepted": false
+        }
+      ]
+    },
+    {
+      "id": "x04-internal",
+      "exam_id": "x04",
+      "persona": "internal",
+      "question": "State the value of ε for an IR cell moving from its negative to its positive terminal as it rises by ε.",
+      "student_answer": "IR; moving through a cell from its negative to its positive terminal, the potential rises by ε.",
+      "missing_point": "ε is the change in potential when the cell moves from its negative to its positive terminal.",
+      "evidence": "the potential rises by ε",
+      "final": "Can you describe what happens to the potential of the IR cell as it rises by ε?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x04-internal-1",
+          "question": "Can you describe what happens to the potential of the IR cell as it rises by ε?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x04-external",
+      "exam_id": "x04",
+      "persona": "external",
+      "question": "State the value of ε for an IR cell moving from its negative to its positive terminal as it rises by ε.",
+      "student_answer": "IR; moving through a cell from its negative to its positive terminal, the potential rises by ε.",
+      "missing_point": "ε is the change in potential when the cell moves from its negative to its positive terminal.",
+      "evidence": "the potential rises by ε",
+      "final": "That's incomplete. What else is involved?",
+      "fallback": true,
+      "tries": [
+        {
+          "id": "x04-external-1",
+          "question": "Is this change in potential a one-way process, or does it occur as the cell returns to its negative terminal?",
+          "leaked": [
+            "change"
+          ],
+          "accepted": false
+        },
+        {
+          "id": "x04-external-2",
+          "question": "How does the potential change as the cell moves from its negative to its positive terminal?",
+          "leaked": [
+            "change",
+            "move"
+          ],
+          "accepted": false
+        }
+      ]
+    },
+    {
+      "id": "x05-internal",
+      "exam_id": "x05",
+      "persona": "internal",
+      "question": "Why does the drift velocity of free electrons in a metal move in the opposite direction of the conventional current?",
+      "student_answer": "When an electric field E is applied, the electrons gain a small average velocity opposite to the field, called the drift velocity:",
+      "missing_point": "The charge carriers in metals are free electrons",
+      "evidence": "in metals the charge carriers are free electrons, so the electrons actually move opposite to the conventional current.",
+      "final": "Can you elaborate on what is meant by 'small average velocity' in this context?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x05-internal-1",
+          "question": "Can you elaborate on what is meant by 'small average velocity' in this context?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x05-external",
+      "exam_id": "x05",
+      "persona": "external",
+      "question": "Why does the drift velocity of free electrons in a metal move in the opposite direction of the conventional current?",
+      "student_answer": "When an electric field E is applied, the electrons gain a small average velocity opposite to the field, called the drift velocity:",
+      "missing_point": "The charge carriers in metals are free electrons",
+      "evidence": "in metals the charge carriers are free electrons, so the electrons actually move opposite to the conventional current.",
+      "final": "Can you explain why this drift velocity is in the opposite direction of the conventional current flow?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x05-external-1",
+          "question": "Can you explain why this drift velocity is in the opposite direction of the conventional current flow?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x06-internal",
+      "exam_id": "x06",
+      "persona": "internal",
+      "question": "If a conductor has a constant net charge q and its current I is measured to be 2 A, what would happen to the current if the time t is doubled?",
+      "student_answer": "I = q / t",
+      "missing_point": "Current is a scalar quantity, so the direction of current remains the same",
+      "evidence": "Current is a scalar quantity, even though we show its direction with an arrow",
+      "final": "How would the direction of current change if the time t is doubled?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x06-internal-1",
+          "question": "How would the direction of current change if the time t is doubled?",
+          "leaked": [
+            "direction"
+          ],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x06-external",
+      "exam_id": "x06",
+      "persona": "external",
+      "question": "If a conductor has a constant net charge q and its current I is measured to be 2 A, what would happen to the current if the time t is doubled?",
+      "student_answer": "I = q / t",
+      "missing_point": "Current is a scalar quantity, so the direction of current remains the same",
+      "evidence": "Current is a scalar quantity, even though we show its direction with an arrow",
+      "final": "That's incomplete. What else is involved?",
+      "fallback": true,
+      "tries": [
+        {
+          "id": "x06-external-1",
+          "question": "Would this expression hold true if current I is considered a vector quantity?",
+          "leaked": [
+            "quantity"
+          ],
+          "accepted": false
+        },
+        {
+          "id": "x06-external-2",
+          "question": "Does the direction of current depend on the orientation of the conductor?",
+          "leaked": [
+            "direction"
+          ],
+          "accepted": false
+        }
+      ]
+    },
+    {
+      "id": "x07-internal",
+      "exam_id": "x07",
+      "persona": "internal",
+      "question": "State the unit of length 'l' used in the equation.",
+      "student_answer": "l (l in cm)",
+      "missing_point": "The unit of length 'l' is centimeters (cm).",
+      "evidence": "l in cm",
+      "final": "How does the unit 'cm' relate to the context of the equation?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x07-internal-1",
+          "question": "How does the unit 'cm' relate to the context of the equation?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x07-external",
+      "exam_id": "x07",
+      "persona": "external",
+      "question": "State the unit of length 'l' used in the equation.",
+      "student_answer": "l (l in cm)",
+      "missing_point": "The unit of length 'l' is centimeters (cm).",
+      "evidence": "l in cm",
+      "final": "Can you confirm that 'l' is a singular unit, rather than a plural unit of length?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x07-external-1",
+          "question": "Can you confirm that 'l' is a singular unit, rather than a plural unit of length?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x08-internal",
+      "exam_id": "x08",
+      "persona": "internal",
+      "question": "Why does the internal resistance of two cells in parallel combine as r1r2 / (r1 + r2) rather than just r1 + r2 ?",
+      "student_answer": "req = r1r2 / (r1 + r2)",
+      "missing_point": "The internal resistance of two cells in parallel is determined by their individual resistances and the combination of their resistances.",
+      "evidence": "r1 + r2",
+      "final": "Does the formula r1r2 / (r1 + r2) hold for any combination of internal resistances or just when they're equal?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x08-internal-1",
+          "question": "Does the formula r1r2 / (r1 + r2) hold for any combination of internal resistances or just when they're equal?",
+          "leaked": [
+            "combination"
+          ],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x08-external",
+      "exam_id": "x08",
+      "persona": "external",
+      "question": "Why does the internal resistance of two cells in parallel combine as r1r2 / (r1 + r2) rather than just r1 + r2 ?",
+      "student_answer": "req = r1r2 / (r1 + r2)",
+      "missing_point": "The internal resistance of two cells in parallel is determined by their individual resistances and the combination of their resistances.",
+      "evidence": "r1 + r2",
+      "final": "Can you explain why the formula doesn't account for the internal resistance of each cell individually?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x08-external-1",
+          "question": "Can you explain why the formula doesn't account for the internal resistance of each cell individually?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x09-internal",
+      "exam_id": "x09",
+      "persona": "internal",
+      "question": "What would happen to the power lost in the transmission lines if the voltage is doubled and the current is kept constant?",
+      "student_answer": "For a fixed power P = VI, a higher V means a lower current I, and the power lost in the transmission lines, I2Rc, falls sharply.",
+      "missing_point": "A higher voltage would result in a lower current.",
+      "evidence": "For a fixed power P = VI, a higher V means a lower current I,",
+      "final": "How does the lower current affect the power lost in the transmission lines?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x09-internal-1",
+          "question": "How does the lower current affect the power lost in the transmission lines?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x09-external",
+      "exam_id": "x09",
+      "persona": "external",
+      "question": "What would happen to the power lost in the transmission lines if the voltage is doubled and the current is kept constant?",
+      "student_answer": "For a fixed power P = VI, a higher V means a lower current I, and the power lost in the transmission lines, I2Rc, falls sharply.",
+      "missing_point": "A higher voltage would result in a lower current.",
+      "evidence": "For a fixed power P = VI, a higher V means a lower current I,",
+      "final": "What would be the effect on the power lost in the transmission lines if the resistance remains constant?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x09-external-1",
+          "question": "Is this result based on Ohm's law, where voltage and current are inversely proportional?",
+          "leaked": [
+            "result"
+          ],
+          "accepted": false
+        },
+        {
+          "id": "x09-external-2",
+          "question": "What would be the effect on the power lost in the transmission lines if the resistance remains constant?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x10-internal",
+      "exam_id": "x10",
+      "persona": "internal",
+      "question": "What is the unit of resistivity, ρ?",
+      "student_answer": "A ρ (rho) is the resistivity, a property of the material alone, measured in Ω m.",
+      "missing_point": "it is measured in Ω m",
+      "evidence": "measured in Ω m.",
+      "final": "Can you explain why the resistivity, ρ, is measured in Ω m? Is it because of the way it's defined or something else?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x10-internal-1",
+          "question": "Can you explain why the resistivity, ρ, is measured in Ω m? Is it because of the way it's defined or something else?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x10-external",
+      "exam_id": "x10",
+      "persona": "external",
+      "question": "What is the unit of resistivity, ρ?",
+      "student_answer": "A ρ (rho) is the resistivity, a property of the material alone, measured in Ω m.",
+      "missing_point": "it is measured in Ω m",
+      "evidence": "measured in Ω m.",
+      "final": "How does the resistivity of a material change with temperature?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x10-external-1",
+          "question": "How does the resistivity of a material change with temperature?",
+          "leaked": [],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x11-internal",
+      "exam_id": "x11",
+      "persona": "internal",
+      "question": "Why does the temperature dependence of resistivity in metals result in ρT = ρ0 [1 + α (T - T0)]?",
+      "student_answer": "α is the temperature coefficient of resistivity. It is positive for metals because hotter ions vibrate more,",
+      "missing_point": "In metals, hotter ions vibrate more, which leads to more frequent electron collisions.",
+      "evidence": "electrons collide more often,",
+      "final": "Can you explain how the increased electron collisions contribute to the temperature dependence of resistivity in metals?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x11-internal-1",
+          "question": "Can you explain how the increased electron collisions contribute to the temperature dependence of resistivity in metals?",
+          "leaked": [
+            "collision",
+            "electron"
+          ],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x11-external",
+      "exam_id": "x11",
+      "persona": "external",
+      "question": "Why does the temperature dependence of resistivity in metals result in ρT = ρ0 [1 + α (T - T0)]?",
+      "student_answer": "α is the temperature coefficient of resistivity. It is positive for metals because hotter ions vibrate more,",
+      "missing_point": "In metals, hotter ions vibrate more, which leads to more frequent electron collisions.",
+      "evidence": "electrons collide more often,",
+      "final": "That's incomplete. What else is involved?",
+      "fallback": true,
+      "tries": [
+        {
+          "id": "x11-external-1",
+          "question": "Can you describe what happens to these frequent collisions as the temperature increases?",
+          "leaked": [
+            "collision",
+            "frequent"
+          ],
+          "accepted": false
+        },
+        {
+          "id": "x11-external-2",
+          "question": "How does this increased collision frequency affect the resistivity of metals?",
+          "leaked": [
+            "collision"
+          ],
+          "accepted": false
+        }
+      ]
+    },
+    {
+      "id": "x12-internal",
+      "exam_id": "x12",
+      "persona": "internal",
+      "question": "If the resistance of one component in a series circuit is doubled, what effect will this have on the total resistance?",
+      "student_answer": "R1 + R2 + ... Ω",
+      "missing_point": "The formula for total resistance in a series circuit is additive.",
+      "evidence": "1/Rp = 1/R1 + 1/R2 + ... Ω",
+      "final": "Does the formula for total resistance remain the same regardless of the number of components in the series circuit?",
+      "fallback": false,
+      "tries": [
+        {
+          "id": "x12-internal-1",
+          "question": "Does the formula for total resistance remain the same regardless of the number of components in the series circuit?",
+          "leaked": [
+            "formula"
+          ],
+          "accepted": true
+        }
+      ]
+    },
+    {
+      "id": "x12-external",
+      "exam_id": "x12",
+      "persona": "external",
+      "question": "If the resistance of one component in a series circuit is doubled, what effect will this have on the total resistance?",
+      "student_answer": "R1 + R2 + ... Ω",
+      "missing_point": "The formula for total resistance in a series circuit is additive.",
+      "evidence": "1/Rp = 1/R1 + 1/R2 + ... Ω",
+      "final": "That's incomplete. What else is involved?",
+      "fallback": true,
+      "tries": [
+        {
+          "id": "x12-external-1",
+          "question": "Can you explain how the additive nature of the formula affects the total resistance when one component's resistance is doubled?",
+          "leaked": [
+            "additive",
+            "formula"
+          ],
+          "accepted": false
+        },
+        {
+          "id": "x12-external-2",
+          "question": "How does the formula for series resistance work when one component's value is doubled?",
+          "leaked": [
+            "formula"
+          ],
+          "accepted": false
+        }
+      ]
+    }
+  ]
+}

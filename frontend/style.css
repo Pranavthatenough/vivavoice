@@ -249,6 +249,41 @@ mark { color: inherit; border-radius: 2px; padding: 0 1px; }
 .ladder .q-label { font: 0.8rem var(--f-ui); fill: var(--pencil); text-anchor: middle; }
 .pages li .pg-was { font-size: 0.7rem; }
 
+/* ---------- Review page ---------- */
+a.brand { text-decoration: none; }
+.review-link { margin-top: 2.5rem; }
+.review-link a { color: var(--ink); }
+.review-title { font-size: clamp(1.7rem, 3.6vw, 2.2rem); }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0 0 1.5rem; border-bottom: 1px solid var(--rule); }
+.tab {
+  font: 700 1rem var(--f-ui); color: var(--pencil); background: none; border: 0;
+  padding: 0.5rem 0; margin-bottom: -1px; border-bottom: 2.5px solid transparent; cursor: pointer;
+}
+.tab[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.tab-count { font-weight: 400; font-size: 0.85rem; }
+.label-small { font-weight: 700; margin: 1.25rem 0 0.35rem; }
+.student-answer { font: 1.15rem/1.6 var(--f-hand); color: var(--ink); margin: 0; }
+.missing-point { font-family: var(--f-text); margin: 0; }
+.point-checks { padding-left: 1.25rem; margin: 0.5rem 0 1.25rem; }
+.point-checks li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem;
+  padding: 0.55rem 0; border-bottom: 1px solid var(--rule); }
+.point-text { flex: 1 1 16rem; }
+.yesno { border: 0; padding: 0; margin: 1.25rem 0; }
+.yesno legend { font-weight: 700; padding: 0; }
+.yesno .hint { margin: 0.2rem 0 0.6rem; }
+.yesno-buttons { display: inline-flex; gap: 0.4rem; }
+.choice-btn {
+  font: 700 0.95rem var(--f-ui); color: var(--ink); background: none;
+  border: 1.5px solid var(--ink); border-radius: 6px; padding: 0.4rem 1rem; cursor: pointer; min-width: 4rem;
+}
+.choice-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.excerpt-details { margin: 1rem 0; }
+.excerpt-details summary { cursor: pointer; color: var(--ink); font-weight: 700; }
+.excerpt-details blockquote { margin: 0.75rem 0 0; padding-left: 1rem; border-left: 3px solid var(--rule); font: 1rem/1.75 var(--f-text); }
+.review-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 1.5rem; }
+.link-btn { font: 1rem var(--f-ui); color: var(--pencil); background: none; border: 0; text-decoration: underline; cursor: pointer; }
+.empty-note { color: var(--pencil); font-family: var(--f-text); font-size: 1.05rem; }
+
 /* ---------- Small screens ---------- */
 @media (max-width: 600px) {
   :root { --margin-w: 3.6rem; }

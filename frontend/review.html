@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VivaVoice review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">VivaVoice</a>
+    <span class="topbar-note">Review for the evaluation</span>
+  </header>
+
+  <main class="sheet">
+    <div class="row">
+      <div class="margin"><span class="qnum" id="item-num"></span></div>
+      <div class="body">
+        <h1 class="review-title">Be the second examiner.</h1>
+        <p class="lead">Judge each item yourself. The examiner's own verdicts are hidden so they can't sway you; the evaluation report then measures how often it agrees with you.</p>
+
+        <nav class="tabs" id="tabs" aria-label="What to review"></nav>
+
+        <section id="item" aria-live="polite"></section>
+
+        <div class="review-actions" id="actions" hidden>
+          <button class="btn quiet" type="button" id="prev-btn">Previous</button>
+          <button class="btn" type="button" id="save-btn">Save and next</button>
+          <button class="link-btn" type="button" id="skip-btn">Skip for now</button>
+        </div>
+        <p class="hint" id="keys-hint"></p>
+        <p class="status" id="status" role="status"></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="review.js"></script>
+</body>
+</html>

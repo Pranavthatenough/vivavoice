@@ -1,0 +1,33 @@
+{
+  "notes": "physics_current",
+  "about": "Questions worded differently from the notes, each with the page that answers it. The out_of_scope questions are NOT in the notes; one is about physics on purpose, to make it harder.",
+  "questions": [
+    {"q": "Why does a bulb light up almost instantly if electrons drift so slowly?", "page": 1},
+    {"q": "What is the SI unit of electric current and how is it defined?", "page": 1},
+    {"q": "How is current related to the number of free electrons and their drift speed?", "page": 1},
+    {"q": "Is current a vector or a scalar, and why?", "page": 1},
+    {"q": "What does Ohm's law state?", "page": 2},
+    {"q": "Which factors decide the resistance of a wire?", "page": 2},
+    {"q": "Why is nichrome used for heating elements?", "page": 2},
+    {"q": "Give an example of a device that does not obey Ohm's law.", "page": 2},
+    {"q": "What happens to a semiconductor's resistivity when it is heated?", "page": 2},
+    {"q": "Is the combined resistance in parallel more or less than the smallest resistor?", "page": 3},
+    {"q": "Why are home appliances wired in parallel?", "page": 3},
+    {"q": "What is the difference between EMF and terminal voltage?", "page": 3},
+    {"q": "What is the internal resistance of n identical cells connected in parallel?", "page": 3},
+    {"q": "Which conservation law is behind Kirchhoff's junction rule?", "page": 4},
+    {"q": "When is a Wheatstone bridge balanced?", "page": 4},
+    {"q": "Where should the balance point be on a meter bridge for the best accuracy?", "page": 4},
+    {"q": "Why is electricity transmitted at very high voltage?", "page": 5},
+    {"q": "How many joules are there in one kilowatt hour?", "page": 5},
+    {"q": "What is Joule heating?", "page": 5},
+    {"q": "How do heaters and irons produce heat from current?", "page": 5}
+  ],
+  "out_of_scope": [
+    "What is photosynthesis?",
+    "Who won the 2011 Cricket World Cup?",
+    "How does a magnet produce a magnetic field?",
+    "What is the speed of sound in air?",
+    "State Newton's second law of motion."
+  ]
+}

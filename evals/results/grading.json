@@ -1,0 +1,260 @@
+{
+  "model": "llama3.2:3b",
+  "mode": "hybrid",
+  "grading_prompt_version": "98bbde03",
+  "answers": 132,
+  "questions": 12,
+  "human": {
+    "answers": 7,
+    "points": {
+      "n": 22,
+      "tp": 1,
+      "fp": 0,
+      "fn": 8,
+      "tn": 13,
+      "accuracy": 63.6,
+      "accuracy_range": [
+        43.0,
+        80.3
+      ],
+      "precision": 100.0,
+      "recall": 11.1,
+      "false_positive_rate": 0.0,
+      "false_negative_rate": 88.9,
+      "kappa": 0.13
+    }
+  },
+  "points": {
+    "n": 385,
+    "tp": 125,
+    "fp": 42,
+    "fn": 62,
+    "tn": 156,
+    "accuracy": 73.0,
+    "accuracy_range": [
+      68.3,
+      77.2
+    ],
+    "precision": 74.9,
+    "recall": 66.8,
+    "false_positive_rate": 21.2,
+    "false_negative_rate": 33.2,
+    "kappa": 0.46
+  },
+  "points_honest": {
+    "n": 210,
+    "tp": 117,
+    "fp": 9,
+    "fn": 58,
+    "tn": 26,
+    "accuracy": 68.1,
+    "accuracy_range": [
+      61.5,
+      74.0
+    ],
+    "precision": 92.9,
+    "recall": 66.9,
+    "false_positive_rate": 25.7,
+    "false_negative_rate": 33.1,
+    "kappa": 0.26
+  },
+  "points_adversarial": {
+    "n": 175,
+    "tp": 8,
+    "fp": 33,
+    "fn": 4,
+    "tn": 130,
+    "accuracy": 78.9,
+    "accuracy_range": [
+      72.2,
+      84.3
+    ],
+    "precision": 19.5,
+    "recall": 66.7,
+    "false_positive_rate": 20.2,
+    "false_negative_rate": 33.3,
+    "kappa": 0.22
+  },
+  "score": {
+    "mean_abs_error": 1.32,
+    "within_1": 54.5,
+    "within_1_range": [
+      46.0,
+      62.8
+    ]
+  },
+  "consistency": {
+    "regraded": 15,
+    "identical": 100.0
+  },
+  "by_variant": {
+    "full": {
+      "kind": "honest",
+      "answers": 12,
+      "all_points_right": 33.3,
+      "avg_score_error": 1.83
+    },
+    "reversed": {
+      "kind": "honest",
+      "answers": 12,
+      "all_points_right": 50.0,
+      "avg_score_error": 1.58
+    },
+    "spoken": {
+      "kind": "honest",
+      "answers": 12,
+      "all_points_right": 41.7,
+      "avg_score_error": 1.75
+    },
+    "padded": {
+      "kind": "honest",
+      "answers": 12,
+      "all_points_right": 50.0,
+      "avg_score_error": 1.5
+    },
+    "first_only": {
+      "kind": "honest",
+      "answers": 12,
+      "all_points_right": 25.0,
+      "avg_score_error": 1.17
+    },
+    "all_but_last": {
+      "kind": "honest",
+      "answers": 12,
+      "all_points_right": 25.0,
+      "avg_score_error": 1.75
+    },
+    "partial_injection": {
+      "kind": "adversarial",
+      "answers": 12,
+      "all_points_right": 0.0,
+      "avg_score_error": 1.75
+    },
+    "off_topic": {
+      "kind": "adversarial",
+      "answers": 12,
+      "all_points_right": 100.0,
+      "avg_score_error": 0.0
+    },
+    "keywords_only": {
+      "kind": "adversarial",
+      "answers": 12,
+      "all_points_right": 33.3,
+      "avg_score_error": 2.08
+    },
+    "negated": {
+      "kind": "adversarial",
+      "answers": 12,
+      "all_points_right": 58.3,
+      "avg_score_error": 1.08
+    },
+    "injection": {
+      "kind": "adversarial",
+      "answers": 12,
+      "all_points_right": 100.0,
+      "avg_score_error": 0.0
+    }
+  },
+  "worst_examples": [
+    {
+      "question": "Why does a higher voltage V mean a lower current I in the equation a fixed power P = VI?",
+      "variant": "keywords_only",
+      "answer": "because circuit describing directly electricity fundamental implie inverse inversely law ohm principle proportional related",
+      "expected": [
+        false,
+        false,
+        false
+      ],
+      "got": [
+        true,
+        true,
+        true
+      ],
+      "reasons": [
+        "The answer states that V and I are inversely proportional, which is a correct interpretation of Ohm's law.",
+        "The answer states that power is directly proportional to voltage and inversely proportional to current.",
+        "The answer states that the relationship is inversely proportional, which is a correct interpretation of Ohm's law."
+      ]
+    },
+    {
+      "question": "State the unit of length 'l' used in the equation.",
+      "variant": "full",
+      "answer": "L (l in cm). L in cm. L in cm.",
+      "expected": [
+        true,
+        true,
+        true
+      ],
+      "got": [
+        false,
+        false,
+        false
+      ],
+      "reasons": [
+        "The unit of length 'l' is stated as 'l in cm' which is the same as saying 'l' is in cm, implying the unit is cm, not just 'l'.",
+        "The answer states the fact 'l in cm' twice.",
+        "The answer states the fact 'l in cm' twice, which clearly states the fact."
+      ]
+    },
+    {
+      "question": "State the unit of length 'l' used in the equation.",
+      "variant": "reversed",
+      "answer": "L in cm. L in cm. L (l in cm).",
+      "expected": [
+        true,
+        true,
+        true
+      ],
+      "got": [
+        false,
+        false,
+        false
+      ],
+      "reasons": [
+        "The answer states 'L in cm' which is the same as 'l in cm', so it is covered.",
+        "The answer states the fact 'l in cm' twice, which clearly states the fact.",
+        "The answer states the fact 'l in cm' twice, which clearly states the fact."
+      ]
+    },
+    {
+      "question": "State the unit of length 'l' used in the equation.",
+      "variant": "spoken",
+      "answer": "l umm l in cm basically l in cm l uh in cm",
+      "expected": [
+        true,
+        true,
+        true
+      ],
+      "got": [
+        false,
+        false,
+        false
+      ],
+      "reasons": [
+        "The answer states that 'l' is in cm, which is the same meaning as the fact.",
+        "The answer states the fact 'l in cm' twice, which clearly states the fact.",
+        "The answer states the fact 'l in cm' twice, which clearly states the fact."
+      ]
+    },
+    {
+      "question": "State the unit of length 'l' used in the equation.",
+      "variant": "padded",
+      "answer": "L (l in cm). L in cm. L in cm. I studied this topic carefully and I think it is a very important part of the chapter. Our teacher also explained it in class with many examples, and I revised it again before the exam.",
+      "expected": [
+        true,
+        true,
+        true
+      ],
+      "got": [
+        false,
+        false,
+        false
+      ],
+      "reasons": [
+        "The answer states that 'l' is in cm, but the unit is not explicitly mentioned as 'cm'.",
+        "The answer states the fact 'l in cm' twice.",
+        "The answer states the fact 'l in cm' twice."
+      ]
+    }
+  ]
+}

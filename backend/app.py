@@ -14,9 +14,10 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 import examiner
+import review
 import voice
 from examiner import LEVELS, PERSONAS, ExaminerUnavailable, VivaSession
-from rag import ROOT, get_db, ingest
+from rag import ROOT, EmbeddingUnavailable, get_db, ingest
 
 UPLOADS = ROOT / "data" / "uploads"
 MAX_UPLOAD_MB = 25
@@ -57,6 +58,11 @@ class AnswerRequest(BaseModel):
 
 class SpeakRequest(BaseModel):
     text: str
+
+
+class LabelRequest(BaseModel):
+    id: str
+    value: dict | list | None = None     # None removes the label
 
 
 def get_session(sid):
@@ -104,6 +110,10 @@ def upload_notes(file: UploadFile):
         name = ingest(str(path))
     except ValueError as e:              # e.g. a scanned PDF with no text
         raise HTTPException(400, str(e))
+    except EmbeddingUnavailable as e:    # memory: nothing was changed, so just try again
+        raise HTTPException(503, str(e))
+    except Exception as e:               # anything else: say what it was instead of a bare 500
+        raise HTTPException(500, f"Couldn't read these notes: {str(e)[:200]}")
     return {"name": name}
 
 
@@ -209,6 +219,17 @@ def speak(req: SpeakRequest):
 @app.get("/api/sessions/{sid}/report")
 def report(sid: str):
     return get_session(sid).report()
+
+
+@app.get("/api/review")
+def review_items():
+    """Items to label for the evaluation. The examiner's verdicts are deliberately left out."""
+    return {"items": review.items(), "labels": review.load_labels()}
+
+
+@app.post("/api/review")
+def review_label(req: LabelRequest):
+    return {"labelled": review.save_label(req.id, req.value)}
 
 
 # Serve the web page (frontend folder) at the root address.

@@ -1,0 +1,25 @@
+{
+  "about": "Read each sentence aloud and save it as evals/voice/<id>.m4a (or .wav / .mp3). The terms are the subject words that matter most for grading.",
+  "sentences": [
+    {"id": "e1", "language": "en", "text": "At balance, no current flows through the galvanometer of a Wheatstone bridge.",
+     "context": "When is a Wheatstone bridge balanced?", "terms": ["Wheatstone", "galvanometer"]},
+    {"id": "e2", "language": "en", "text": "Drift velocity is very small because electrons keep colliding, and the relaxation time between collisions is short.",
+     "context": "Explain why drift velocity depends on relaxation time.", "terms": ["drift velocity", "relaxation time", "collisions"]},
+    {"id": "e3", "language": "en", "text": "Kirchhoff's junction rule follows from the conservation of charge.",
+     "context": "Why is the junction rule a consequence of conservation of charge?", "terms": ["Kirchhoff", "junction", "conservation"]},
+    {"id": "e4", "language": "en", "text": "Nichrome and manganin have a very small temperature coefficient of resistivity.",
+     "context": "Why are alloys like nichrome used in standard resistors?", "terms": ["nichrome", "manganin", "coefficient", "resistivity"]},
+    {"id": "e5", "language": "en", "text": "The terminal voltage is less than the EMF while the cell is supplying current.",
+     "context": "What is the difference between EMF and terminal voltage?", "terms": ["terminal voltage", "EMF"]},
+    {"id": "e6", "language": "en", "text": "Gallium arsenide is non-ohmic because more than one voltage can give the same current.",
+     "context": "Give an example of a non-ohmic material.", "terms": ["gallium arsenide", "non-ohmic"]},
+    {"id": "e7", "language": "en", "text": "Umm, so one kilowatt hour is, uh, basically three point six million joules.",
+     "context": "What is a kilowatt hour?", "terms": ["kilowatt hour", "joules"], "fillers": 3},
+    {"id": "h1", "language": "hinglish", "text": "Wheatstone bridge balance hota hai jab galvanometer mein koi current nahi hota.",
+     "context": "When is a Wheatstone bridge balanced?", "terms": ["Wheatstone", "galvanometer", "current"]},
+    {"id": "h2", "language": "hinglish", "text": "Drift velocity bahut kam hoti hai kyunki electrons baar baar collide karte hain.",
+     "context": "Why is drift velocity small?", "terms": ["drift velocity", "electrons"]},
+    {"id": "h3", "language": "hinglish", "text": "Matlab semiconductor ko garam karne par uski resistivity kam ho jaati hai.",
+     "context": "What happens to a semiconductor's resistivity when heated?", "terms": ["semiconductor", "resistivity"], "fillers": 1}
+  ]
+}

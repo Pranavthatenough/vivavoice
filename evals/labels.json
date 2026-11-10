@@ -1,0 +1,340 @@
+{
+  "grade/cloud_computing_20261110_205425/1": {
+    "at": "2026-11-10 21:07",
+    "value": [
+      false,
+      false
+    ]
+  },
+  "grade/cloud_computing_20261110_205425/2": {
+    "at": "2026-11-10 21:07",
+    "value": [
+      false,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261108_230943/0": {
+    "at": "2026-11-10 21:07",
+    "value": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "grade/physics_current_20261108_231244/0": {
+    "at": "2026-11-10 21:07",
+    "value": [
+      false,
+      false,
+      false
+    ]
+  },
+  "grade/physics_current_20261109_104511/1": {
+    "at": "2026-11-10 21:07",
+    "value": [
+      false,
+      false,
+      false
+    ]
+  },
+  "grade/physics_current_20261109_104511/2": {
+    "at": "2026-11-10 21:08",
+    "value": [
+      true,
+      false,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261109_104511/3": {
+    "at": "2026-11-10 21:08",
+    "value": [
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  "grade/physics_current_20261109_104511/4": {
+    "at": "2026-11-10 21:08",
+    "value": [
+      false,
+      true,
+      true
+    ]
+  },
+  "grade/physics_current_20261109_104511/5": {
+    "at": "2026-11-10 21:08",
+    "value": [
+      false,
+      false,
+      false
+    ]
+  },
+  "ground/x01": {
+    "at": "2026-11-10 21:08",
+    "value": {
+      "answerable": true,
+      "level_ok": true
+    }
+  },
+  "ground/x02": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": true,
+      "level_ok": true
+    }
+  },
+  "ground/x03": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": false,
+      "level_ok": false
+    }
+  },
+  "ground/x04": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": true,
+      "level_ok": true
+    }
+  },
+  "ground/x05": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": false,
+      "level_ok": false
+    }
+  },
+  "ground/x06": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": true,
+      "level_ok": true
+    }
+  },
+  "ground/x07": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": false,
+      "level_ok": false
+    }
+  },
+  "ground/x08": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": true,
+      "level_ok": true
+    }
+  },
+  "ground/x09": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": false,
+      "level_ok": false
+    }
+  },
+  "ground/x10": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": true,
+      "level_ok": true
+    }
+  },
+  "ground/x11": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": false,
+      "level_ok": false
+    }
+  },
+  "ground/x12": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "answerable": true,
+      "level_ok": true
+    }
+  },
+  "leak/x01-external-1": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x01-internal-1": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x02-external-1": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x02-internal-1": {
+    "at": "2026-11-10 21:09",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x03-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x03-external-2": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x03-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x04-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x04-external-2": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x04-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x05-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x05-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x06-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x06-external-2": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x06-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x07-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x07-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x08-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x08-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x09-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x09-external-2": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x09-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x10-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x10-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x11-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x11-external-2": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  },
+  "leak/x11-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x12-external-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x12-external-2": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": true
+    }
+  },
+  "leak/x12-internal-1": {
+    "at": "2026-11-10 21:10",
+    "value": {
+      "gives_away": false
+    }
+  }
+}

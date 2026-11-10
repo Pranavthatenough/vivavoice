@@ -1,0 +1,499 @@
+{
+  "notes": "physics_current",
+  "model": "llama3.2:3b",
+  "prompt_version": "a9f3999e",
+  "built": "2026-11-09 14:09",
+  "summary": {
+    "all": {
+      "questions": 12,
+      "grounded": 91.7,
+      "grounded_range": [
+        64.6,
+        98.5
+      ],
+      "grounded_first_try": 50.0,
+      "avg_attempts": 1.67,
+      "quotes_found": 97.1,
+      "level_match_auto": 100.0,
+      "seconds_median": 6.5,
+      "seconds_p90": 11.28
+    },
+    "recall": {
+      "questions": 4,
+      "grounded": 100.0,
+      "grounded_range": [
+        51.0,
+        100.0
+      ],
+      "grounded_first_try": 75.0,
+      "avg_attempts": 1.5,
+      "quotes_found": 100.0,
+      "level_match_auto": 100.0,
+      "seconds_median": 7.0,
+      "seconds_p90": 18.13
+    },
+    "explain": {
+      "questions": 4,
+      "grounded": 100.0,
+      "grounded_range": [
+        51.0,
+        100.0
+      ],
+      "grounded_first_try": 50.0,
+      "avg_attempts": 1.5,
+      "quotes_found": 100.0,
+      "level_match_auto": 100.0,
+      "seconds_median": 6.05,
+      "seconds_p90": 10.04
+    },
+    "apply": {
+      "questions": 4,
+      "grounded": 75.0,
+      "grounded_range": [
+        30.1,
+        95.4
+      ],
+      "grounded_first_try": 25.0,
+      "avg_attempts": 2.0,
+      "quotes_found": 91.7,
+      "level_match_auto": 100.0,
+      "seconds_median": 6.55,
+      "seconds_p90": 9.93
+    }
+  },
+  "items": [
+    {
+      "question": "State the unit of resistance in Ohm's Law.",
+      "key_points": [
+        {
+          "point": "The constant R is the resistance of the conductor.",
+          "evidence": "The constant R is the resistance of the conductor.",
+          "span": [
+            224,
+            273
+          ]
+        },
+        {
+          "point": "One ohm is the resistance of a conductor through which one ampere flows when one volt is applied across it.",
+          "evidence": "One ohm is the resistance of a conductor through which one ampere flows when one volt is applied across it.",
+          "span": [
+            303,
+            409
+          ]
+        },
+        {
+          "point": "Its SI unit is the ohm (Ω).",
+          "evidence": "Its SI unit is the ohm (Ω).",
+          "span": [
+            275,
+            301
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 2,
+      "source_text": "2. Ohm's Law and Resistance Ohm's law states that the current through a conductor is directly proportional to the potential difference across its ends, provided physical conditions such as temperature stay constant: V = I R The constant R is the resistance of the conductor. Its SI unit is the ohm (Ω). One ohm is the resistance of a conductor through which one ampere flows when one volt is applied across it. Resistivity Resistance depends on the length L and cross-sectional area A of the conductor and on its material: R = ρ L / A ρ (rho) is the resistivity, a property of the material alone, measured in Ω m. Doubling the length doubles the resistance; doubling the area",
+      "chunk_id": "p2_c0",
+      "level": 0,
+      "attempts": 1,
+      "seconds_to_generate": 21.4,
+      "id": "x01"
+    },
+    {
+      "question": "Why does a higher voltage V mean a lower current I in the equation a fixed power P = VI?",
+      "key_points": [
+        {
+          "point": "A higher voltage V means a lower current I because of the inverse relationship between V and I in Ohm's law V = I R.",
+          "evidence": "V = I R ohm (Ω)",
+          "span": [
+            419,
+            434
+          ]
+        },
+        {
+          "point": "The equation a fixed power P = VI implies that power is directly proportional to voltage and inversely proportional to current.",
+          "evidence": "a fixed power P = VI",
+          "span": [
+            0,
+            20
+          ]
+        },
+        {
+          "point": "This relationship is a fundamental principle of electricity, describing how voltage and current are related in a circuit.",
+          "evidence": "Ohm's law V = I R ohm (Ω)",
+          "span": [
+            409,
+            434
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 5,
+      "source_text": "a fixed power P = VI, a higher V means a lower current I, and the power lost in the transmission lines, I2Rc, falls sharply. Commercial unit Electricity bills use the kilowatt-hour (kWh), often called a unit. 1 kWh = 3.6 × 106 J. A 1000 W heater running for one hour uses exactly one unit. 7. Quick Revision Table Quantity Formula SI unit Current I = q / t ampere (A) Current vs drift velocity I = n e A vd A Ohm's law V = I R ohm (Ω) for R Resistance R = ρ L / A Ω Series Rs = R1 + R2 + ... Ω Parallel 1/Rp = 1/R1 + 1/R2 + ... Ω Terminal",
+      "chunk_id": "p5_c1",
+      "level": 1,
+      "attempts": 2,
+      "seconds_to_generate": 11.3,
+      "id": "x02"
+    },
+    {
+      "question": "If the three resistors in the worked example are replaced with 2 Ω, 3 Ω, and 6 Ω resistors, what would be the resistance of the parallel circuit?",
+      "key_points": [
+        {
+          "point": "The resistance of a parallel circuit is calculated using the formula Rp = R1R2 / (R1 + R2).",
+          "evidence": "For two resistors, Rp = R1R2 / (R1 + R2).",
+          "span": [
+            12,
+            52
+          ]
+        },
+        {
+          "point": "The same formula applies to any number of resistors in a parallel circuit.",
+          "evidence": "For two resistors, Rp = R1R2 / (R1 + R2).",
+          "span": [
+            12,
+            52
+          ]
+        },
+        {
+          "point": "The resistance of the parallel circuit is independent of the individual resistors' values.",
+          "evidence": "Rp = R1R2 / (R1 + R2) does not specify which resistor is R1 or R2.",
+          "span": null
+        }
+      ],
+      "grounded": false,
+      "page": 3,
+      "source_text": "resistance. For two resistors, Rp = R1R2 / (R1 + R2). Household appliances are connected in parallel so each gets the full mains voltage and can be switched on or off independently. Worked example Three resistors of 2 Ω, 3 Ω and 6 Ω are connected in parallel. 1/Rp = 1/2 + 1/3 + 1/6 = 1, so Rp = 1 Ω. In series, the same three would give 11 Ω. 4. EMF and Internal Resistance The electromotive force (EMF, ε) of a cell is the potential difference between its terminals when no current is drawn. Despite its name, it is not a force; it is the work done by the cell per unit charge, measured in volts. Real cells",
+      "chunk_id": "p3_c1",
+      "level": 2,
+      "attempts": 3,
+      "seconds_to_generate": 11.1,
+      "id": "x03"
+    },
+    {
+      "question": "State the value of ε for an IR cell moving from its negative to its positive terminal as it rises by ε.",
+      "key_points": [
+        {
+          "point": "ε is the potential difference between the cell's terminals.",
+          "evidence": "IR; moving through a cell from its negative to its positive terminal, the potential rises by ε.",
+          "span": [
+            0,
+            94
+          ]
+        },
+        {
+          "point": "ε is the change in potential when the cell moves from its negative to its positive terminal.",
+          "evidence": "the potential rises by ε",
+          "span": [
+            70,
+            94
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 4,
+      "source_text": "IR; moving through a cell from its negative to its positive terminal, the potential rises by ε. Wheatstone bridge A Wheatstone bridge has four resistors P, Q, R and S arranged in a loop, a cell across one diagonal and a galvanometer across the other. The bridge is balanced when no current flows through the galvanometer, which happens when: P / Q = R / S At balance the galvanometer's resistance does not matter. This lets us find an unknown resistance precisely from three known ones. Meter bridge A meter bridge is a practical Wheatstone bridge using a uniform 1 m wire. If the balance point is at length l from one end, with known resistance R in the left",
+      "chunk_id": "p4_c1",
+      "level": 0,
+      "attempts": 3,
+      "seconds_to_generate": 10.5,
+      "id": "x04"
+    },
+    {
+      "question": "Why does the drift velocity of free electrons in a metal move in the opposite direction of the conventional current?",
+      "key_points": [
+        {
+          "point": "The direction of the drift velocity is opposite to the conventional current",
+          "evidence": "When an electric field E is applied, the electrons gain a small average velocity opposite to the field, called the drift velocity:",
+          "span": [
+            396,
+            525
+          ]
+        },
+        {
+          "point": "The charge carriers in metals are free electrons",
+          "evidence": "in metals the charge carriers are free electrons, so the electrons actually move opposite to the conventional current.",
+          "span": [
+            156,
+            273
+          ]
+        },
+        {
+          "point": "The conventional current direction is based on positive charges",
+          "evidence": "By convention, the direction of current is the direction in which positive charges would move.",
+          "span": [
+            61,
+            154
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 1,
+      "source_text": "algebraically and do not follow the laws of vector addition. By convention, the direction of current is the direction in which positive charges would move. In metals the charge carriers are free electrons, so the electrons actually move opposite to the conventional current. Drift velocity Free electrons in a metal move randomly at high speeds, but with no field their average velocity is zero. When an electric field E is applied, the electrons gain a small average velocity opposite to the field, called the drift velocity: vd = (e E τ) / m Here e is the electron charge, m its mass, and τ the relaxation time: the average time between successive collisions. Drift velocity is very small, of the",
+      "chunk_id": "p1_c1",
+      "level": 1,
+      "attempts": 1,
+      "seconds_to_generate": 4.0,
+      "id": "x05"
+    },
+    {
+      "question": "If a conductor has a constant net charge q and its current I is measured to be 2 A, what would happen to the current if the time t is doubled?",
+      "key_points": [
+        {
+          "point": "Current is directly proportional to time, but the unit remains the same",
+          "evidence": "I = q / t",
+          "span": [
+            325,
+            334
+          ]
+        },
+        {
+          "point": "Current is a scalar quantity, so the direction of current remains the same",
+          "evidence": "Current is a scalar quantity, even though we show its direction with an arrow",
+          "span": [
+            435,
+            512
+          ]
+        },
+        {
+          "point": "The direction of current is determined by the convention that positive charges move in the direction of current",
+          "evidence": "By convention, the direction of current is the direction in which positive charges would move",
+          "span": [
+            596,
+            689
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 1,
+      "source_text": "Current Electricity: Revision Notes Class 12 Physics level. Original sample notes written for testing the VivaVoice project. 1. Electric Current Electric current is the rate of flow of electric charge through a cross-section of a conductor. If a net charge q passes through a cross-section in time t, the average current is: I = q / t The SI unit of current is the ampere (A). One ampere is a flow of one coulomb of charge per second. Current is a scalar quantity, even though we show its direction with an arrow, because currents add algebraically and do not follow the laws of vector addition. By convention, the direction of current is the direction in which positive charges would move.",
+      "chunk_id": "p1_c0",
+      "level": 2,
+      "attempts": 1,
+      "seconds_to_generate": 4.7,
+      "id": "x06"
+    },
+    {
+      "question": "State the unit of length 'l' used in the equation.",
+      "key_points": [
+        {
+          "point": "The unit of length 'l' in the equation S = R (100 - l) / l.",
+          "evidence": "l (l in cm)",
+          "span": [
+            173,
+            184
+          ]
+        },
+        {
+          "point": "The unit of length 'l' is centimeters (cm).",
+          "evidence": "l in cm",
+          "span": [
+            176,
+            183
+          ]
+        },
+        {
+          "point": "The unit of length 'l' is specified in centimeters (cm).",
+          "evidence": "l in cm",
+          "span": [
+            176,
+            183
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 4,
+      "source_text": "bridge using a uniform 1 m wire. If the balance point is at length l from one end, with known resistance R in the left gap and unknown S in the right gap: S = R (100 - l) / l (l in cm) For best accuracy, choose R so that the balance point lies near the middle of the wire, which reduces the effect of end errors.",
+      "chunk_id": "p4_c2",
+      "level": 0,
+      "attempts": 1,
+      "seconds_to_generate": 3.5,
+      "id": "x07"
+    },
+    {
+      "question": "Why does the internal resistance of two cells in parallel combine as r1r2 / (r1 + r2) rather than just r1 + r2 ?",
+      "key_points": [
+        {
+          "point": "The formula req = r1r2 / (r1 + r2) is derived from the concept of resistance in parallel.",
+          "evidence": "req = r1r2 / (r1 + r2)",
+          "span": [
+            208,
+            230
+          ]
+        },
+        {
+          "point": "The internal resistance of two cells in parallel is determined by their individual resistances and the combination of their resistances.",
+          "evidence": "r1 + r2",
+          "span": [
+            198,
+            205
+          ]
+        },
+        {
+          "point": "The formula req = r1r2 / (r1 + r2) takes into account the relationship between the individual resistances and the combined resistance.",
+          "evidence": "r1r2 / (r1 + r2)",
+          "span": [
+            214,
+            230
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 3,
+      "source_text": "n identical cells in series: total EMF nε, total internal resistance nr. • n identical cells in parallel: total EMF ε, total internal resistance r/n. • Two cells in parallel: εeq = (ε1r2 + ε2r1) / (r1 + r2), req = r1r2 / (r1 + r2).",
+      "chunk_id": "p3_c3",
+      "level": 1,
+      "attempts": 1,
+      "seconds_to_generate": 5.0,
+      "id": "x08"
+    },
+    {
+      "question": "What would happen to the power lost in the transmission lines if the voltage is doubled and the current is kept constant?",
+      "key_points": [
+        {
+          "point": "The power lost in the transmission lines would fall sharply.",
+          "evidence": "For a fixed power P = VI, a higher V means a lower current I, and the power lost in the transmission lines, I2Rc, falls sharply.",
+          "span": [
+            488,
+            615
+          ]
+        },
+        {
+          "point": "A higher voltage would result in a lower current.",
+          "evidence": "For a fixed power P = VI, a higher V means a lower current I,",
+          "span": [
+            488,
+            548
+          ]
+        },
+        {
+          "point": "The power lost in the transmission lines would be calculated using the formula I2Rc.",
+          "evidence": "the power lost in the transmission lines, I2Rc,",
+          "span": [
+            554,
+            600
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 5,
+      "source_text": "6. Electrical Energy and Power When a current I flows through a resistor with potential difference V for a time t, the energy converted to heat is W = V I t. The rate of this conversion is the electrical power: P = V I = I2 R = V2 / R The SI unit of power is the watt (W). The heating of a resistor by current is called Joule heating, and it is the principle behind electric heaters, irons and filament bulbs. Power transmission Power stations transmit electricity at very high voltages. For a fixed power P = VI, a higher V means a lower current I, and the power lost in the transmission lines, I2Rc, falls sharply.",
+      "chunk_id": "p5_c0",
+      "level": 2,
+      "attempts": 2,
+      "seconds_to_generate": 5.9,
+      "id": "x09"
+    },
+    {
+      "question": "What is the unit of resistivity, ρ?",
+      "key_points": [
+        {
+          "point": "it is the property of the material alone",
+          "evidence": "A ρ (rho) is the resistivity, a property of the material alone, measured in Ω m.",
+          "span": [
+            0,
+            79
+          ]
+        },
+        {
+          "point": "it is measured in Ω m",
+          "evidence": "measured in Ω m.",
+          "span": [
+            64,
+            79
+          ]
+        },
+        {
+          "point": "it is related to conductivity",
+          "evidence": "Conductivity σ is the reciprocal of resistivity, σ = 1/ρ.",
+          "span": [
+            202,
+            258
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 2,
+      "source_text": "A ρ (rho) is the resistivity, a property of the material alone, measured in Ω m. Doubling the length doubles the resistance; doubling the area halves it. From the microscopic picture, ρ = m / (n e2 τ). Conductivity σ is the reciprocal of resistivity, σ = 1/ρ. Ohm's law in vector form is j = σ E. Ohmic and non-ohmic devices A device is ohmic if its V-I graph is a straight line through the origin, for example a metal wire at constant temperature. Non-ohmic devices break this in different ways: • The V-I graph is not a straight line (for example, a filament bulb as it heats up). • The current depends on the direction of V (for",
+      "chunk_id": "p2_c1",
+      "level": 0,
+      "attempts": 1,
+      "seconds_to_generate": 3.4,
+      "id": "x10"
+    },
+    {
+      "question": "Why does the temperature dependence of resistivity in metals result in ρT = ρ0 [1 + α (T - T0)]?",
+      "key_points": [
+        {
+          "point": "The temperature coefficient of resistivity (α) is positive for metals.",
+          "evidence": "α is the temperature coefficient of resistivity. It is positive for metals because hotter ions vibrate more,",
+          "span": [
+            340,
+            447
+          ]
+        },
+        {
+          "point": "In metals, hotter ions vibrate more, which leads to more frequent electron collisions.",
+          "evidence": "electrons collide more often,",
+          "span": [
+            449,
+            477
+          ]
+        },
+        {
+          "point": "The result of this increased collision rate is a decrease in τ.",
+          "evidence": "and τ decreases.",
+          "span": [
+            479,
+            494
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 2,
+      "source_text": "graph is not a straight line (for example, a filament bulb as it heats up). • The current depends on the direction of V (for example, a diode). • More than one value of V gives the same current (for example, gallium arsenide). Temperature dependence For metals, resistivity rises roughly linearly with temperature: ρT = ρ0 [1 + α (T - T0)] α is the temperature coefficient of resistivity. It is positive for metals because hotter ions vibrate more, electrons collide more often, and τ decreases. Alloys such as nichrome and manganin have a very small α, which is why they are used in standard resistors and heating elements. Semiconductors have a negative α: heating frees more charge carriers, so",
+      "chunk_id": "p2_c2",
+      "level": 1,
+      "attempts": 2,
+      "seconds_to_generate": 7.1,
+      "id": "x11"
+    },
+    {
+      "question": "If the resistance of one component in a series circuit is doubled, what effect will this have on the total resistance?",
+      "key_points": [
+        {
+          "point": "The total resistance in a series circuit increases when one component has its resistance doubled.",
+          "evidence": "R1 + R2 + ... Ω",
+          "span": [
+            24,
+            39
+          ]
+        },
+        {
+          "point": "The formula for total resistance in a series circuit is additive.",
+          "evidence": "1/Rp = 1/R1 + 1/R2 + ... Ω",
+          "span": [
+            49,
+            75
+          ]
+        },
+        {
+          "point": "When resistances are added in series, the total resistance is the sum of the individual resistances.",
+          "evidence": "R1 + R2 + ... Ω",
+          "span": [
+            24,
+            39
+          ]
+        }
+      ],
+      "grounded": true,
+      "page": 5,
+      "source_text": "= ρ L / A Ω Series Rs = R1 + R2 + ... Ω Parallel 1/Rp = 1/R1 + 1/R2 + ... Ω Terminal voltage V = ε - I r volt (V) Wheatstone balance P / Q = R / S - Power P = V I = I²R = V²/R watt (W) Common mistakes • Confusing EMF with terminal voltage: they are equal only when no current flows. • Thinking electrons move at the speed of the signal: drift velocity is tiny, the field travels fast. • Assuming every device obeys Ohm's law: diodes and bulbs do not. • Forgetting that resistivity depends on material and temperature, not on the wire's shape.",
+      "chunk_id": "p5_c2",
+      "level": 2,
+      "attempts": 2,
+      "seconds_to_generate": 7.2,
+      "id": "x12"
+    }
+  ]
+}

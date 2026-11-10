@@ -7,6 +7,7 @@ Usage (run from the project folder):
 """
 import re
 import sys
+import time
 from pathlib import Path
 
 import chromadb
@@ -58,9 +59,36 @@ def chunk_page(text, size=CHUNK_WORDS, overlap=OVERLAP_WORDS):
     return chunks
 
 
+class EmbeddingUnavailable(Exception):
+    """The embedding model couldn't run, even after retrying."""
+
+
+_embed_on_cpu = False
+
+
 def embed(texts):
-    """Turn a list of texts into vectors using the local Ollama model."""
-    return ollama.embed(model=EMBED_MODEL, input=texts)["embeddings"]
+    """
+    Turn a list of texts into vectors using the local Ollama model.
+    Like the examiner's LLM calls, it retries when memory is short, and moves
+    to the CPU for the rest of the run if the GPU's own memory is full.
+    """
+    global _embed_on_cpu
+    last = None
+    for attempt in range(1, 4):
+        try:
+            options = {"num_gpu": 0} if _embed_on_cpu else {}
+            return ollama.embed(model=EMBED_MODEL, input=texts, options=options)["embeddings"]
+        except Exception as e:
+            last = e
+            print(f"Embedding failed (try {attempt} of 3): {str(e)[:160]}")
+            if "cuda" in str(e).lower() and not _embed_on_cpu:
+                _embed_on_cpu = True
+                print("The GPU is out of memory: embedding on the CPU instead.")
+                continue
+            time.sleep(2 * attempt)
+    raise EmbeddingUnavailable(
+        f"The embedding model ({EMBED_MODEL}) couldn't run. It's usually short of memory: close other apps "
+        f"and try again. Details: {str(last)[:200]}")
 
 
 def collection_name(pdf_path):
@@ -76,11 +104,6 @@ def get_db():
 def ingest(pdf_path):
     """Read a PDF, chunk it, embed the chunks and save them with page numbers."""
     name = collection_name(pdf_path)
-    db = get_db()
-    if name in [c.name for c in db.list_collections()]:
-        db.delete_collection(name)      # re-ingesting replaces the old copy
-    col = db.create_collection(name, metadata={"hnsw:space": "cosine"})
-
     ids, docs, metas = [], [], []
     for page, text in read_pdf(pdf_path):
         for j, chunk in enumerate(chunk_page(text)):
@@ -88,7 +111,14 @@ def ingest(pdf_path):
             docs.append(chunk)
             metas.append({"page": page, "source": Path(pdf_path).name})
 
-    col.add(ids=ids, documents=docs, metadatas=metas, embeddings=embed(docs))
+    # Embed BEFORE touching the database: if embedding fails, the old copy of the
+    # notes (if any) is left untouched instead of being replaced by an empty one.
+    vectors = embed(docs)
+    db = get_db()
+    if name in [c.name for c in db.list_collections()]:
+        db.delete_collection(name)      # re-ingesting replaces the old copy
+    col = db.create_collection(name, metadata={"hnsw:space": "cosine"})
+    col.add(ids=ids, documents=docs, metadatas=metas, embeddings=vectors)
     pages = len({m["page"] for m in metas})
     print(f"Saved {len(docs)} chunks from {pages} pages into collection '{name}'.")
     return name

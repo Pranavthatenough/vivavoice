@@ -77,3 +77,22 @@ Every prompt I gave my AI agent while building VivaVoice, in order.
 **Design decision:** Did not switch to a multilingual embedding model, because embeddings only find passages and never read answers.
 
 **Results:** Follow-ups asked 5, recovered 2, leaks blocked 1 (generic fallback used 0 times). Speculation hits 3 of 8.
+
+**Voice eval (10 read-aloud sentences, 4 Whisper setups):**
+| Setup | EN WER | EN terms | HI terms | x realtime |
+|---|---|---|---|---|
+| app (style prompt + question) | 8.8% | 83.3% | 57.1% | 0.76 |
+| style prompt only | 9.9% | 83.3% | 42.9% | 0.71 |
+| no prompt | 11.0% | 77.8% | 0.0% | 0.71 |
+| Whisper base | 14.3% | 77.8% | 71.4% | 0.90 |
+
+**Findings:** The Hinglish style prompt is essential (terms 0% → 57%). The question only helps with words it contains ("Kirchhoff" → "Pritchoff" because the question didn't mention it). Kept Whisper small: base had a much higher English WER.
+
+**Grading: before and after (132 constructed answers, llama3.2:3b)**
+| Version | Key points right | False credit | Injection resisted |
+|---|---|---|---|
+| Checklist (Phase 2) | 49.4% | 38.9% | 8.3% |
+| Per-point (one key point per call, reason first) | 67.5% | 51.0% | 0.0% |
+| Hybrid (per-point + word-overlap guard in code) | 73.0% | 21.2% | 100% |
+
+**Findings:** The checklist design from Phase 2 was the main weakness: the 3B model lost track when judging several points at once. Per-point grading fixed missed points but made the grader too generous and fell for prompt injection despite instructions. A rule in plain code (a point needs at least 2 shared meaningful words) blocked all injection attempts, because a small model can't be reliably prompted out of injection. Remaining weaknesses: 33% of real points still missed; keyword lists and negation still fool it.
